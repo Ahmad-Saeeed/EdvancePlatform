@@ -11,6 +11,10 @@ public class StudentLoginPage {
         By rememberMeCheckBoxLocator = By.xpath("//input[@type='checkbox']");
         By forgetPasswordLinkLocator = By.xpath("//a[@href='/forgot-password']");
         By registerNowLinkLocator = By.xpath("//a[@href='/signup']");
+        By welcomeLocator=By.xpath("//main//h1");
+        By errorMsgLocator= By.xpath("//div[contains(@class,'errorMessage')]");
+
+
         String edvanceLoginURL = "https://edvance-ace.vercel.app/login";
         String validEmail_1 = "student1@test.com";
         String validEmail_2 = "student2@test.com";
@@ -18,6 +22,9 @@ public class StudentLoginPage {
         String validPassword = "password123";
         String invalidEmail = "tester@test.com";
         String invalidPassword = "TestPassword123";
+
+
+
         Bot loginBot;
 
         public StudentLoginPage(Bot bot) {
@@ -49,7 +56,7 @@ public class StudentLoginPage {
         }
 
         public void enterInvalidPassword() {
-            loginBot.typeInto(emailFieldLocator, invalidPassword);
+            loginBot.typeInto(passwordFieldLocator, invalidPassword);
         }
 
         public void clickONLoginButton() {
@@ -57,9 +64,29 @@ public class StudentLoginPage {
         }
 
         public String currentURL() {
+
             return loginBot.currentURL();
         }
 
+        public boolean isWelcomeMessageExist()
+        {
+            return loginBot.displayedText(welcomeLocator).contains("مرحبا");
+        }
+
+        public boolean erorrMsgDisplayed()
+        {
+            return  loginBot.displayedText(errorMsgLocator).contains("فشل");
+        }
+
+        public  void clickOnForgerPassword()
+        {
+            loginBot.clickOn(forgetPasswordLinkLocator);
+        }
+
+        public  void clickOnRegisterNow()
+        {
+            loginBot.clickOn(registerNowLinkLocator);
+        }
 
     }
 
