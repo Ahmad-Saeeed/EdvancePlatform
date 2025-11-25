@@ -18,93 +18,122 @@ public class StudentSignUpPage {
     By dateOfBirthFieldLocator=By.xpath("//input[@id='birthDate']");
     By passwordFieldLocator=By.xpath("//input[@id='password']");
     By confirmPasswordFieldLocator=By.xpath("//input[@id='confirmPassword']");
-    By continueButtonLocator=By.xpath("//button[contains(@class,'backButton')]");
+    By nextButtonLocator =By.xpath("//button[contains(@class,'backButton')]");
     By backButtonLocator=By.xpath("//button[@type='button']");
-    By subjectsCheckBoxsLocator=By.xpath("//div[contains(@class,'subjectsGrid')]");
+    By subject_1CheckBoxLocator =By.xpath("(//input[@type='checkbox'])[1]");
+    By subject_2CheckBoxLocator =By.xpath("(//input[@type='checkbox'])[2]");
     By goalSelectDropDownMenuLocator=By.xpath("//select[contains(@class,'goalSelect')]");
     By acceptTermsCheckBoxLocator=By.xpath("//input[@name='acceptTerms']");
     By createProfileButtonLocator=By.xpath("//button[contains(@class,'submitButton')]");
+
+
     String edvanceSignUpURL = "https://edvance-ace.vercel.app/signup";
 
-    Bot loginBot;
+    Bot sigUpBot;
 
     // 2. Constructor
 
     public StudentSignUpPage(Bot bot) {
-        loginBot = bot;
+        sigUpBot = bot;
     }
 
     //3. Methods and Actions
 
     public void navigateToSignUpPage() {
-        loginBot.navigateTo(edvanceSignUpURL);
+        sigUpBot.navigateTo(edvanceSignUpURL);
     }
 
-    public void enterFirstName()
+    public void clickOnPlatformIcon()
     {
+        sigUpBot.clickOn(platformLogoInSignUpPageLocator);
+    }
 
+    public void clickOnLoginLinkFromHeader()
+    {
+        sigUpBot.clickOn(loginLinkFromHeaderLocator);
+    }
+
+    public void clickOnLoginLinkFromForm()
+    {
+        sigUpBot.clickOn(loginLinkInFormContainerLocator);
+    }
+
+    public void clickOnStudentCard()
+    {
+        sigUpBot.clickOn(studentCardLocator);
+    }
+
+    public void enterValidFirstName()
+    {
+        sigUpBot.typeInto(firstNameFieldLocator,"Ahmed");
     }
 
     public void enterInvalidFirstNameLength()
     {
-
+        sigUpBot.typeInto(firstNameFieldLocator,"a");
     }
 
-    public void enterLastName()
+    public void enterValidLastName()
     {
-
+        sigUpBot.typeInto(lastNameFieldLocator,"Tester");
     }
 
     public void enterInvalidLastNameLength()
     {
-
+        sigUpBot.typeInto(lastNameFieldLocator,"k");
     }
 
-    public void enterEmail()
+    public void enterValidEmail()
     {
-
+        sigUpBot.typeInto(emailFieldLocator,"ahmed@testing.com");
     }
 
 
     public void enterInvalidEmailFormat()
     {
-
+        sigUpBot.typeInto(emailFieldLocator,"ads");
     }
 
     public void enterValidPhoneNumber()
     {
-
+        sigUpBot.typeInto(phoneNumberFieldLocator,"1234567890");
     }
 
     public void enterInvalidPhoneNumber()
     {
-
+        sigUpBot.typeInto(phoneNumberFieldLocator,"1234578");
     }
 
     public void selectGrade()
     {
-
+        sigUpBot.selectFromList(gradeSelectionMenuLocator,"Third Grade");
     }
 
     public void enterValidDateOfBirth()
     {
-
+        sigUpBot.typeInto(dateOfBirthFieldLocator,"02152015");
     }
 
     public void enterInvalidDateOfBirth()
     {
-
+        sigUpBot.typeInto(dateOfBirthFieldLocator,"02151999");
     }
 
 
     public void enterValidPassword()
     {
-
+    sigUpBot.typeInto(passwordFieldLocator,"A1234567");
     }
 
-    public void enterInvalidPassword()
+    public void enterInvalidPasswordLength()
     {
+        sigUpBot.typeInto(passwordFieldLocator,"A123456");
+    }
 
+    public void enterInvalidPasswordFormat()
+    {
+        //password length is correct but doesn't have capital char.
+        sigUpBot.typeInto(passwordFieldLocator,"12345678");
     }
 
     public void confirmWithValidPassword()
@@ -114,32 +143,38 @@ public class StudentSignUpPage {
 
     public void confirmWithInvalidPassword()
     {
-
+        sigUpBot.typeInto(confirmPasswordFieldLocator,"WrongPass123");
     }
 
     public void clickOnNextButton()
     {
-
+    sigUpBot.clickOn(nextButtonLocator);
     }
 
     public void clickOnBackButton()
     {
-
+        sigUpBot.clickOn(backButtonLocator);
     }
 
-    public void selectFavoriteSubject()
+    public void selectFavoriteSubjects()
     {
-
+        sigUpBot.clickOn(subject_1CheckBoxLocator);
+        sigUpBot.clickOn(subject_2CheckBoxLocator);
     }
 
     public void selectYourGoal()
     {
-
+        sigUpBot.selectFromList(goalSelectDropDownMenuLocator,"improve");
     }
 
     public void checkTheTermsAndConditionsBox()
     {
+        sigUpBot.clickOn(acceptTermsCheckBoxLocator);
+    }
 
+    public void clickOnCreateAccount()
+    {
+        sigUpBot.clickOn(createProfileButtonLocator);
     }
 
 

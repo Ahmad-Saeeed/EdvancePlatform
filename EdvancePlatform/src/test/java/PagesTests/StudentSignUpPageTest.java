@@ -1,4 +1,6 @@
 package PagesTests;
 
-public class StudentSignUpPageTest extends BaseTest{
+public class StudentSignUpPageTest extends BaseTest
+{
+    
 }
