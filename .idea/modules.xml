@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/EdvancePlatform.iml" filepath="$PROJECT_DIR$/.idea/EdvancePlatform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EdvancePlatform/EdvancePlatform.iml" filepath="$PROJECT_DIR$/EdvancePlatform/EdvancePlatform.iml" />
     </modules>
   </component>
 </project>
