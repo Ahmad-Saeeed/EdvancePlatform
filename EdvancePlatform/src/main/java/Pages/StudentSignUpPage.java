@@ -18,13 +18,18 @@ public class StudentSignUpPage {
     By dateOfBirthFieldLocator=By.xpath("//input[@id='birthDate']");
     By passwordFieldLocator=By.xpath("//input[@id='password']");
     By confirmPasswordFieldLocator=By.xpath("//input[@id='confirmPassword']");
-    By nextButtonLocator =By.xpath("//button[contains(@class,'backButton')]");
+    By nextButtonLocator =By.xpath("//button[contains(@class,'nextButton')]");
     By backButtonLocator=By.xpath("//button[@type='button']");
     By subject_1CheckBoxLocator =By.xpath("(//input[@type='checkbox'])[1]");
     By subject_2CheckBoxLocator =By.xpath("(//input[@type='checkbox'])[2]");
     By goalSelectDropDownMenuLocator=By.xpath("//select[contains(@class,'goalSelect')]");
     By acceptTermsCheckBoxLocator=By.xpath("//input[@name='acceptTerms']");
     By createProfileButtonLocator=By.xpath("//button[contains(@class,'submitButton')]");
+    By welcomeEdvanceLocator=By.xpath("//p[contains(@class,'success')][1]");
+    By loginButtonSuccessLocator=By.xpath("(//a[@href='/login'])[2]");
+
+    /*===============================error Msgs locators===============================*/
+    By firstNameErrorMsgLocator= By.xpath("(//span[contains(@class,'errorMessage')])[1]");
 
 
     String edvanceSignUpURL = "https://edvance-ace.vercel.app/signup";
@@ -33,7 +38,8 @@ public class StudentSignUpPage {
 
     // 2. Constructor
 
-    public StudentSignUpPage(Bot bot) {
+    public StudentSignUpPage(Bot bot)
+    {
         sigUpBot = bot;
     }
 
@@ -85,7 +91,7 @@ public class StudentSignUpPage {
 
     public void enterValidEmail()
     {
-        sigUpBot.typeInto(emailFieldLocator,"ahmed@testing.com");
+        sigUpBot.typeInto(emailFieldLocator,"ahmed@autotesting.com");
     }
 
 
@@ -106,7 +112,7 @@ public class StudentSignUpPage {
 
     public void selectGrade()
     {
-        sigUpBot.selectFromList(gradeSelectionMenuLocator,"Third Grade");
+        sigUpBot.selectFromList(gradeSelectionMenuLocator,"primary-4");
     }
 
     public void enterValidDateOfBirth()
@@ -138,7 +144,7 @@ public class StudentSignUpPage {
 
     public void confirmWithValidPassword()
     {
-        enterValidPassword();
+        sigUpBot.typeInto(confirmPasswordFieldLocator,"A1234567");
     }
 
     public void confirmWithInvalidPassword()
@@ -148,7 +154,7 @@ public class StudentSignUpPage {
 
     public void clickOnNextButton()
     {
-    sigUpBot.clickOn(nextButtonLocator);
+        sigUpBot.clickOn(nextButtonLocator);
     }
 
     public void clickOnBackButton()
@@ -177,6 +183,15 @@ public class StudentSignUpPage {
         sigUpBot.clickOn(createProfileButtonLocator);
     }
 
+    public boolean successfulSignupWelcomeMsgDisplayed()
+    {
+        return sigUpBot.displayedText(welcomeEdvanceLocator).contains("Success");
+    }
+
+    public boolean loginButtonInSuccessfulSignupDisplayed()
+    {
+        return sigUpBot.checkObjectDisplay(loginButtonSuccessLocator);
+    }
 
 
 }

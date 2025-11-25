@@ -93,7 +93,7 @@ public class Bot {
     {
         wait.until(f->{
             Select select =new Select(f.findElement(listLocator));
-            select.selectByContainsVisibleText(textToSelect);
+            select.selectByValue(textToSelect);
             return true;
         });
 
@@ -103,6 +103,13 @@ public class Bot {
     {
         Alert alert = driver.switchTo().alert();
         alert.accept();
+    }
+
+    public boolean checkObjectDisplay(By objectLocator)
+    {
+        return wait.until(f->{
+            return f.findElement(objectLocator).isDisplayed();
+        });
     }
 
     public void sessionTearDown() {
