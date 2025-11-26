@@ -28,11 +28,13 @@ public class StudentSignUpPage {
     By welcomeEdvanceLocator=By.xpath("//p[contains(@class,'success')][1]");
     By loginButtonSuccessLocator=By.xpath("(//a[@href='/login'])[2]");
 
-    /*===============================error Msgs locators===============================*/
-    By firstNameErrorMsgLocator= By.xpath("(//span[contains(@class,'errorMessage')])[1]");
+    //This error msg locator valid if only one filed is missing or has an error msg.
+    By errorMsgLocator= By.xpath("(//span[contains(@class,'errorMessage')])");
+
 
 
     String edvanceSignUpURL = "https://edvance-ace.vercel.app/signup";
+    String validEmail="Tester@tests.com";
 
     Bot sigUpBot;
 
@@ -91,7 +93,7 @@ public class StudentSignUpPage {
 
     public void enterValidEmail()
     {
-        sigUpBot.typeInto(emailFieldLocator,"ahmed@autotesting.com");
+        sigUpBot.typeInto(emailFieldLocator,validEmail);
     }
 
 
@@ -193,7 +195,15 @@ public class StudentSignUpPage {
         return sigUpBot.checkObjectDisplay(loginButtonSuccessLocator);
     }
 
+    public String errorMessageDisplayedText()
+    {
+        return sigUpBot.displayedText(errorMsgLocator);
+    }
 
+    public String popUpMsgContent()
+    {
+        return  sigUpBot.popUpMessageDisplayedText();
+    }
 }
 
 

@@ -105,6 +105,12 @@ public class Bot {
         alert.accept();
     }
 
+    public String popUpMessageDisplayedText()
+    {
+        Alert alert = driver.switchTo().alert();
+        return alert.getText();
+    }
+
     public boolean checkObjectDisplay(By objectLocator)
     {
         return wait.until(f->{
