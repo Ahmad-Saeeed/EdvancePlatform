@@ -51,9 +51,19 @@ public class StudentSignUpPage {
         sigUpBot.navigateTo(edvanceSignUpURL);
     }
 
-    public void clickOnPlatformIcon()
+    public String currentURL() {
+
+        return sigUpBot.currentURL();
+    }
+
+    public void clickOnPlatformLogo()
     {
         sigUpBot.clickOn(platformLogoInSignUpPageLocator);
+    }
+
+    public String currentURLAfterLoading(String oldURL)
+    {
+        return sigUpBot.getURLWhenItChanges(oldURL);
     }
 
     public void clickOnLoginLinkFromHeader()

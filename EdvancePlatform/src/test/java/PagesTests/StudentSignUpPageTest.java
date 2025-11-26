@@ -6,6 +6,48 @@ import org.testng.annotations.Test;
 
 public class StudentSignUpPageTest extends BaseTest
 {
+
+    @Test
+    public void platformLogoNavigation()
+    {
+        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
+        sUpPg.navigateToSignUpPage();
+        sUpPg.clickOnPlatformLogo();
+
+        String expectedURL="https://edvance-ace.vercel.app/";
+        String actualURL=sUpPg.currentURLAfterLoading(expectedURL+"signup");
+        Assert.assertEquals(actualURL,expectedURL);
+    }
+
+    @Test
+    public void loginLinkFromHeader()
+    {
+        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
+        sUpPg.navigateToSignUpPage();
+        sUpPg.clickOnLoginLinkFromHeader();
+
+        String expectedURL="https://edvance-ace.vercel.app/login";
+        String actualURL=sUpPg.currentURLAfterLoading("https://edvance-ace.vercel.app/signup");
+        Assert.assertEquals(actualURL,expectedURL);
+    }
+
+    @Test
+    public void loginLinkFromForm()
+    {
+        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
+        sUpPg.navigateToSignUpPage();
+        sUpPg.clickOnLoginLinkFromForm();
+
+        String expectedURL="https://edvance-ace.vercel.app/login?redirect=%2Fadmin%2Flogin";
+        String actualURL=sUpPg.currentURLAfterLoading("https://edvance-ace.vercel.app/signup");
+        Assert.assertEquals(actualURL,expectedURL);
+    }
+
+
+
+
+
+
     @Test (enabled = false) // disabled due to email is already used problem
     public void successfulSigningUp()
     {
@@ -32,6 +74,7 @@ public class StudentSignUpPageTest extends BaseTest
         Assert.assertTrue(sUpPg.successfulSignupWelcomeMsgDisplayed()&& sUpPg.loginButtonInSuccessfulSignupDisplayed());
 
     }
+
 
     @Test
     public void firstNameFieldMandatory()
