@@ -121,6 +121,11 @@ public class Bot {
             return f.findElement(objectLocator).isDisplayed();
         });
     }
+    public String getClassAttribute(By locator){
+        return wait.until(d->{
+            return d.findElement(locator).getAttribute("class");
+        });
+    }
 
     public void sessionTearDown() {
         driver.quit();
