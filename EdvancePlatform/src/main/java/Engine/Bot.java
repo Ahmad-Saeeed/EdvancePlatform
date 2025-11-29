@@ -11,12 +11,16 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 
 public class Bot {
-    ChromeOptions options ;
+    ChromeOptions options;
     WebDriver driver;
     Wait<WebDriver> wait;
 
     public Bot() {
         options = new ChromeOptions().addArguments("--start-maximized").addArguments("--incognito");
+
+        //Suggested edit 1
+        //options= new ChromeOptions().addArguments("--start-maximized --incognito ");
+
         driver = new ChromeDriver(options);
         wait = new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(5))
