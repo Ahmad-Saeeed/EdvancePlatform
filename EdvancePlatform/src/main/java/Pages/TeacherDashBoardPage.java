@@ -15,113 +15,148 @@ public class TeacherDashBoardPage {
     By profileLocator = By.xpath("//a[@class='TeacherNav-module__X_bpXW__dropdownItem'][1]");
     By earningsLocator = By.xpath("//a[@class='TeacherNav-module__X_bpXW__dropdownItem'][2]");
     By logOutLocator = By.xpath("//button[@class='TeacherNav-module__X_bpXW__dropdownItem']");
-    By createNewCourseLocator = By.xpath("//button[span[text()='Create New Course']]");
-    By lectureScheduleLocator =By.xpath("//button[span[text()='lecture Schedule']]");
-    By manageStudentsLocators =By.xpath("//button[span[text()='Manage Students']]");
+    By createNewCourseLocator = By.xpath("//*[normalize-space(text())='Create New Course']");
+    By lectureScheduleLocator = By.xpath("//*[normalize-space(text())='Create New Course']");
+    By manageStudentsLocators = By.xpath("//*[normalize-space(text())='Manage Students']");
     By togglestatusLocator = By.xpath("//*[name()='svg' and contains(@class, 'ThemeToggle')]");
     By languageContentLocator = By.xpath("//span[@class='LanguageSwitcher-module__CeKvmG__languageText']");
     By notificationSectionLocator = By.xpath("//div[@class='NotificationDropdown-module__V6trHW__dropdown']");
     By editProfileLocator = By.xpath("//button[@class='TeacherProfile-module__bKMAXG__editButton']");
-    By specializationLocator =By.xpath("//input[@placeholder='Specialization (e.g. Mathematics, Science, Arabic...)' or @placeholder='التخصص (مثال: رياضيات، علوم، لغة عربية...)']");
+    By specializationLocator = By.xpath("//input[@placeholder='Specialization (e.g. Mathematics, Science, Arabic...)' or @placeholder='التخصص (مثال: رياضيات، علوم، لغة عربية...)']");
     By yearsOfExperienceLocator = By.xpath("//input[@placeholder='Number of years of experience' or @placeholder='عدد سنوات الخبرة']");
     By saveChangesLocator = By.xpath("//button[@class='TeacherProfile-module__bKMAXG__saveButton']");
 
-    String loginUrl ="https://edvance-ace.vercel.app/login";
-    String dashBoardUrl ="https://edvance-ace.vercel.app/teacher/dashboard";
+    String loginUrl = "https://edvance-ace.vercel.app/login";
+    String dashBoardUrl = "https://edvance-ace.vercel.app/teacher/dashboard";
     String specilizationFieldValue = "Science";
     String yearsOfExFieldValue = "10";
 
     Bot dashBoardBot;
-    public TeacherDashBoardPage(Bot bot){
+
+    public TeacherDashBoardPage(Bot bot) {
         dashBoardBot = bot;
     }
-    public boolean verifyDashBoardPageLanding(){
+
+    public boolean verifyDashBoardPageLanding() {
         return dashBoardBot.getURLWhenItChanges(loginUrl).contains("dashboard");
     }
-    public void clickOnStudentsField(){
+
+    public void clickOnStudentsField() {
         dashBoardBot.clickOn(studentsLocator);
     }
-    public boolean checkStudentsPageLanding(){
+
+    public boolean checkStudentsPageLanding() {
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("students");
     }
-    public void clickOnSessionScheduleField(){
+
+    public void clickOnSessionScheduleField() {
         dashBoardBot.clickOn(sessionScheduleLocator);
     }
-    public boolean checkSessionSchedulePageLanding(){
+
+    public boolean checkSessionSchedulePageLanding() {
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("schedule");
     }
-    public void clickOnStatisticsField(){
+
+    public void clickOnStatisticsField() {
         dashBoardBot.clickOn(statisticsLocator);
     }
-    public boolean checkStatisticsPageLanding(){
+
+    public boolean checkStatisticsPageLanding() {
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("analytics");
     }
-    public void themeToggleLClick(){
+
+    public void themeToggleLClick() {
         dashBoardBot.clickOn(themeToggleLocator);
     }
-    public boolean checkThemeToggleFunction(){
-        return dashBoardBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__sun")||dashBoardBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__moon");
+
+    public boolean checkThemeToggleFunction() {
+        return dashBoardBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__sun") || dashBoardBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__moon");
     }
-    public void languageButtonLClick(){
+
+    public void languageButtonLClick() {
         dashBoardBot.clickOn(languageToggleLocator);
     }
-    public String checkLanguageIcon(){
+
+    public String checkLanguageIcon() {
         return dashBoardBot.displayedText(languageContentLocator);
     }
-    public void clicOnknotificationButton(){
+
+    public void clicOnknotificationButton() {
         dashBoardBot.clickOn(notificationLocator);
     }
-    public boolean checknotificationSectionDisplay(){
+
+    public boolean checknotificationSectionDisplay() {
         return dashBoardBot.checkObjectDisplay(notificationSectionLocator);
     }
-    public void clickOnDropDownMenu(){
+
+    public void clickOnDropDownMenu() {
         dashBoardBot.clickOn(menuButtonLocator);
     }
-    public void clickOnProfileInDropDownMenu(){
+
+    public void clickOnProfileInDropDownMenu() {
         dashBoardBot.clickOn(profileLocator);
     }
-    public boolean checkProfilePageLanding(){
+
+    public boolean checkProfilePageLanding() {
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("profile");
     }
-    public void clickOnEditProfileButton(){
+
+    public void clickOnEditProfileButton() {
         dashBoardBot.clickOn(editProfileLocator);
     }
-    public void enterInSpecializationField(){
+
+    public void enterInSpecializationField() {
         dashBoardBot.clickOn(specializationLocator);
-        dashBoardBot.typeInto(specializationLocator,specilizationFieldValue);
+        dashBoardBot.typeInto(specializationLocator, specilizationFieldValue);
     }
-    public void enterInSpecializationyearsOfExField(){
-        dashBoardBot.typeInto(yearsOfExperienceLocator,yearsOfExFieldValue);
+
+    public void enterInSpecializationyearsOfExField() {
+        dashBoardBot.typeInto(yearsOfExperienceLocator, yearsOfExFieldValue);
     }
-    public void clickOnSaveChangesButton(){
+
+    public void clickOnSaveChangesButton() {
         dashBoardBot.clickOn(saveChangesLocator);
     }
-    public boolean checkPopUpMessageContent(){
-        return dashBoardBot.popUpMessageDisplayedText().contains("saved successfully")||dashBoardBot.popUpMessageDisplayedText().contains("حفظ الملف الشخصي بنجاح");
+
+    public boolean checkPopUpMessageContent() {
+        return (dashBoardBot.popUpMessageDisplayedText().contains("saved successfully") || dashBoardBot.popUpMessageDisplayedText().contains("حفظ الملف الشخصي بنجاح"));
     }
-    public void acceptPopUpMessage(){
+
+    public void acceptPopUpMessage() {
         dashBoardBot.popUpMessageOK();
     }
-    public boolean checkEnteredDataSaved(){
-       return dashBoardBot.checkObjectDisplay(editProfileLocator);
+
+    public boolean checkEnteredDataSaved() {
+        return dashBoardBot.checkObjectDisplay(editProfileLocator);
     }
+
     //no need
 //    public boolean waitForEditFieldsToLoad() {
 //        return dashBoardBot.checkObjectDisplay(specializationLocator);
 //    }
-    public void clickOnEarningsButton(){
+    public void clickOnEarningsButton() {
         dashBoardBot.clickOn(earningsLocator);
     }
-    public boolean checkEarningsPageLanding(){
+
+    public boolean checkEarningsPageLanding() {
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("earnings");
     }
-    public void clickOnLogoutButton(){
+
+    public void clickOnLogoutButton() {
         dashBoardBot.clickOn(logOutLocator);
     }
-    public boolean checkLogoutSuccessfull(){
+
+    public boolean checkLogoutSuccessfull() {
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("login");
     }
 
+    public void clickCreateNewCourse() {
+        dashBoardBot.clickOn(createNewCourseLocator);
+    }
+
+    public boolean checkCreateNewCoursePageLanding(){
+        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("create");
+    }
 
 
 }

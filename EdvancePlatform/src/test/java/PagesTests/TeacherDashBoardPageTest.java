@@ -10,20 +10,14 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void successfulDashBoardPageLanding(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         Assert.assertTrue(dashBoard.verifyDashBoardPageLanding());
     }
     @Test
     public void accessStudentsPage(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnStudentsField();
         Assert.assertTrue(dashBoard.checkStudentsPageLanding());
     }
@@ -31,10 +25,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public  void accessSessionsSchedulePage(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnSessionScheduleField();
         Assert.assertTrue(dashBoard.checkSessionSchedulePageLanding());
     }
@@ -42,10 +33,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public  void accessStatisticsPage(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnStatisticsField();
         Assert.assertTrue(dashBoard.checkStatisticsPageLanding());
     }
@@ -53,10 +41,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checkThemeToggleButton(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.themeToggleLClick();
         Assert.assertTrue(dashBoard.checkThemeToggleFunction());
     }
@@ -64,10 +49,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checkLanguageToggleButton(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         String defaultLanguage = dashBoard.checkLanguageIcon();
         dashBoard.languageButtonLClick();
         String currentLanguageOnIcon = dashBoard.checkLanguageIcon();
@@ -80,10 +62,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checknotificationSectionDisplay(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clicOnknotificationButton();
         Assert.assertTrue(dashBoard.checknotificationSectionDisplay());
     }
@@ -91,10 +70,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checkAccesToProfilePage(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnDropDownMenu();
         dashBoard.clickOnProfileInDropDownMenu();
         Assert.assertTrue(dashBoard.checkProfilePageLanding());
@@ -103,10 +79,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checkEditProfileSection(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnDropDownMenu();
         dashBoard.clickOnProfileInDropDownMenu();
         dashBoard.clickOnEditProfileButton();
@@ -115,7 +88,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
         dashBoard.enterInSpecializationyearsOfExField();
         dashBoard.clickOnSaveChangesButton();
         //Assert.assertTrue(dashBoard.checkPopUpMessageContent());//trying to check the popup message content
-        //dashBoard.acceptPopUpMessage();// accept the popup message
+        dashBoard.acceptPopUpMessage();// accept the popup message
         Assert.assertTrue(dashBoard.checkEnteredDataSaved());
 
     }
@@ -123,10 +96,7 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checkAccesToEarningsPage(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnDropDownMenu();
         dashBoard.clickOnEarningsButton();
         Assert.assertTrue(dashBoard.checkEarningsPageLanding());
@@ -135,14 +105,19 @@ public class TeacherDashBoardPageTest extends BaseTest {
     public void checkLogoutSuccessful(){
         TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
-        loginPage.clickOnLoginButton();
+        loginPage.navigateandValidLogin();
         dashBoard.clickOnDropDownMenu();
         dashBoard.clickOnLogoutButton();
         Assert.assertTrue(dashBoard.checkLogoutSuccessfull());
     }
 
+    @Test
+    public void checkCreateNewCoursePage(){
+        TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
+        TeacherLoginPage loginPage = new TeacherLoginPage(bot);
+        loginPage.navigateandValidLogin();
+        dashBoard.clickCreateNewCourse();
+        Assert.assertTrue(dashBoard.checkCreateNewCoursePageLanding());
+    }
 
 }

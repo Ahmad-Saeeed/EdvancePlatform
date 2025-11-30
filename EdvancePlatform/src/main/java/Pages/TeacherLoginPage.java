@@ -24,100 +24,113 @@ public class TeacherLoginPage {
 
     String edvanceURL = "https://edvance-ace.vercel.app/login";
     String edvanceForrgotPasswordURL = "https://edvance-ace.vercel.app/forgot-passw";
-    String validEmail1 = "ahmed.mohamed@teacher.com";
-    String validEmail2= "fatma.ali@teacher.com";
-    String validEmail3 ="mahmoud.hassan@teacher.com";
-    String validEmail4 = "karim.youssef@teacher.com";
-    String invalidEmail = "abcd@teacher.com";
-    String validPassword = "password123";
-    String invalidPassword = "password321";
+    public static String validEmail1 = "ahmed.mohamed@teacher.com";
+    public static String validEmail2 = "fatma.ali@teacher.com";
+    public static String validEmail3 = "mahmoud.hassan@teacher.com";
+    public static String validEmail4 = "karim.youssef@teacher.com";
+    public static String invalidEmail = "abcd@teacher.com";
+    public static String validPassword = "password123";
+    public static String invalidPassword = "password321";
     Bot loginBot;
-    public TeacherLoginPage(Bot bot){
+
+    public TeacherLoginPage(Bot bot) {
         loginBot = bot;
     }
-    public void navigateToLoginPage(){
+
+    public void navigateToLoginPage() {
         loginBot.navigateTo(edvanceURL);
     }
-    public void enter1stValidEmail(){
+
+    public void enterEmail(String email){
+        loginBot.typeInto(loginEmailLocator,email);
+    }
+    public void enterPassword(String password){
+        loginBot.typeInto(loginPasswordLocator,password);
+    }
+
+    //General valid navigate and login method to use in the rest of the teacher pages
+    public void navigateandValidLogin(){
+        loginBot.navigateTo(edvanceURL);
         loginBot.typeInto(loginEmailLocator,validEmail1);
-    }
-    public void enter2ndtValidEmail(){
-        loginBot.typeInto(loginEmailLocator,validEmail2);
-    }
-    public void enter3rdValidEmail(){
-        loginBot.typeInto(loginEmailLocator,validEmail3);
-    }
-    public void enter4thValidEmail(){
-        loginBot.typeInto(loginEmailLocator,validEmail4);
-    }
-    public void enterValidPassword(){
         loginBot.typeInto(loginPasswordLocator,validPassword);
-    }
-    public void enterInvalidEmail(){
-        loginBot.typeInto(loginEmailLocator,invalidEmail);
-    }
-    public void enterInvalidPassword(){
-        loginBot.typeInto(loginPasswordLocator,invalidPassword);
-    }
-    public void clickOnLoginButton(){
         loginBot.clickOn(loginButtonLocator);
     }
-    public boolean checkWelcomeMessage(){
-        return (loginBot.displayedText(welcomeMessageLocator).contains("Welcome"))||(loginBot.displayedText(welcomeMessageLocator).contains("أهلاً"));
+
+    public void clickOnLoginButton() {
+        loginBot.clickOn(loginButtonLocator);
     }
 
-    public boolean loginErrorMesDisplayed(){
-        return (loginBot.displayedText(loginErrorMesLocator).contains("Login failed. Check your credentials"))||loginBot.displayedText(loginErrorMesLocator).contains("فشل تسجيل الدخول. تحقق من بياناتك");
+    public boolean checkWelcomeMessage() {
+        return (loginBot.displayedText(welcomeMessageLocator).contains("Welcome")) || (loginBot.displayedText(welcomeMessageLocator).contains("أهلاً"));
     }
-    public void forggotPasswordClick(){
+
+    public boolean loginErrorMesDisplayed() {
+        return (loginBot.displayedText(loginErrorMesLocator).contains("Login failed. Check your credentials")) || loginBot.displayedText(loginErrorMesLocator).contains("فشل تسجيل الدخول. تحقق من بياناتك");
+    }
+
+    public void forggotPasswordClick() {
         loginBot.clickOn(forgotPasswordLocator);
     }
-    public boolean checkForggotPassPagelanding(){
+
+    public boolean checkForggotPassPagelanding() {
         return loginBot.getURLWhenItChanges(edvanceURL).contains("forgot-password");
     }
-    public void registerNowClick(){
+
+    public void registerNowClick() {
         loginBot.clickOn(registerNowLocator);
     }
-    public boolean checkRegisterPageLanding(){
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("signup");
-    }
-    public void featureClick(){
-        loginBot.clickOn(featuresLocator);
-    }
-    public boolean checkFeaturePageLanding(){
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("features");
-    }
-    public void aboutUsClick(){
-        loginBot.clickOn(aboutLocator);
-    }
-    public boolean checkAboutUsPageLanding(){
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("about");
-    }
-    public void contactUsClick(){
-        loginBot.clickOn(contactUsLocator);
-    }
-    public boolean checkContactUsPageLanding(){
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("contact");
-    }
-    public void themeToggleLClick(){
-        loginBot.clickOn(themeToggleLocator);
-    }
-    public boolean checkThemeToggleFunction(){
-        return loginBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__sun")||loginBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__moon");
-    }
-    public void languageButtonLClick(){
-        loginBot.clickOn(languageToggleLocator);
-    }
-    public String checkLanguageIcon(){
-        return loginBot.displayedText(languageContentLocator);
-    }
-    public void joinFreeClick(){
-        loginBot.clickOn(joinFreeLocator);
-    }
-    public boolean checkJoinFreePageLanding(){
+
+    public boolean checkRegisterPageLanding() {
         return loginBot.getURLWhenItChanges(edvanceURL).contains("signup");
     }
 
+    public void featureClick() {
+        loginBot.clickOn(featuresLocator);
+    }
+
+    public boolean checkFeaturePageLanding() {
+        return loginBot.getURLWhenItChanges(edvanceURL).contains("features");
+    }
+
+    public void aboutUsClick() {
+        loginBot.clickOn(aboutLocator);
+    }
+
+    public boolean checkAboutUsPageLanding() {
+        return loginBot.getURLWhenItChanges(edvanceURL).contains("about");
+    }
+
+    public void contactUsClick() {
+        loginBot.clickOn(contactUsLocator);
+    }
+
+    public boolean checkContactUsPageLanding() {
+        return loginBot.getURLWhenItChanges(edvanceURL).contains("contact");
+    }
+
+    public void themeToggleLClick() {
+        loginBot.clickOn(themeToggleLocator);
+    }
+
+    public boolean checkThemeToggleFunction() {
+        return loginBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__sun") || loginBot.getClassAttribute(togglestatusLocator).contains("module__M80vaq__moon");
+    }
+
+    public void languageButtonLClick() {
+        loginBot.clickOn(languageToggleLocator);
+    }
+
+    public String checkLanguageIcon() {
+        return loginBot.displayedText(languageContentLocator);
+    }
+
+    public void joinFreeClick() {
+        loginBot.clickOn(joinFreeLocator);
+    }
+
+    public boolean checkJoinFreePageLanding() {
+        return loginBot.getURLWhenItChanges(edvanceURL).contains("signup");
+    }
 
 
 }

@@ -3,6 +3,7 @@ package PagesTests;
 import Pages.TeacherLoginPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import Pages.TeacherLoginPage.*;
 
 public class TeacherLoginPageTest extends BaseTest{
     //TeacherLoginPage loginPage = new TeacherLoginPage(bot);
@@ -10,26 +11,24 @@ public class TeacherLoginPageTest extends BaseTest{
     public void successfullLoginTestTeacher1(){
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
         loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterValidPassword();
+        loginPage.enterEmail(TeacherLoginPage.validEmail1);
+        loginPage.enterPassword(TeacherLoginPage.validPassword);
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.checkWelcomeMessage());
     }
     @Test
     public void successfullLoginTestTeacher2(){
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter2ndtValidEmail();
-        loginPage.enterValidPassword();
+        loginPage.enterEmail(TeacherLoginPage.validEmail2);
+        loginPage.enterPassword(TeacherLoginPage.validPassword);
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.checkWelcomeMessage());
     }
     @Test
     public void successfullLoginTestTeacher3(){
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
-        loginPage.navigateToLoginPage();
-        loginPage.enter3rdValidEmail();
-        loginPage.enterValidPassword();
+        loginPage.navigateToLoginPage();loginPage.enterEmail(TeacherLoginPage.validEmail3);
+        loginPage.enterPassword(TeacherLoginPage.validPassword);
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.checkWelcomeMessage());
     }
@@ -37,8 +36,8 @@ public class TeacherLoginPageTest extends BaseTest{
     public void successfullLoginTestTeacher4(){
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
         loginPage.navigateToLoginPage();
-        loginPage.enter4thValidEmail();
-        loginPage.enterValidPassword();
+        loginPage.enterEmail(TeacherLoginPage.validEmail4);
+        loginPage.enterPassword(TeacherLoginPage.validPassword);
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.checkWelcomeMessage());
     }
@@ -46,8 +45,8 @@ public class TeacherLoginPageTest extends BaseTest{
     public void invalidLoginEmailTest(){
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
         loginPage.navigateToLoginPage();
-        loginPage.enterInvalidEmail();
-        loginPage.enterValidPassword();
+        loginPage.enterEmail(TeacherLoginPage.invalidEmail);
+        loginPage.enterPassword(TeacherLoginPage.validPassword);
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.loginErrorMesDisplayed());
     }
@@ -55,8 +54,8 @@ public class TeacherLoginPageTest extends BaseTest{
     public void invalidLoginPassTest(){
         TeacherLoginPage loginPage = new TeacherLoginPage(bot);
         loginPage.navigateToLoginPage();
-        loginPage.enter1stValidEmail();
-        loginPage.enterInvalidPassword();
+        loginPage.enterEmail(TeacherLoginPage.validEmail1);
+        loginPage.enterPassword(TeacherLoginPage.invalidPassword);
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.loginErrorMesDisplayed());
     }
