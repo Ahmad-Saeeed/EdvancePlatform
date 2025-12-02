@@ -1,2 +1,2 @@
 # EdvancePlatform
-An automation testing for "Edvance" platform 
+A Test Automation project for "Edvance" platform 
