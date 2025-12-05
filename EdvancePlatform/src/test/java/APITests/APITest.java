@@ -1,6 +1,7 @@
 package APITests;
 
-import io.restassured.RestAssured;
+import static io.restassured.RestAssured.*;
+//import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -8,12 +9,17 @@ import org.testng.annotations.Test;
 import java.net.URL;
 
 public class APITest {
+
+    String apiDocumentation = "https://documenter.getpostman.com/view/37731054/2sB3dLVCTz";
+    String coursesAPI = "https://isitmondaytoday2.com/api/courses";
+
+
     @Test
     public void coursesAPI() {
-        String apiDocumentation = "https://documenter.getpostman.com/view/37731054/2sB3dLVCTz";
-        String coursesAPI = "https://isitmondaytoday2.com/api/courses";
 
-        Response response = RestAssured.get(apiDocumentation);
+        Response response = get(apiDocumentation);
+
+//        Response response = RestAssured.get(apiDocumentation);
 //        Response response = RestAssured.get(coursesAPI);
 
         System.out.println("Status Code: " + response.getStatusCode());
@@ -25,5 +31,11 @@ public class APITest {
 
         int statusCode = response.getStatusCode();
         Assert.assertEquals(statusCode,200);
+    }
+
+    @Test
+    public void coursesAPI2(){
+        given().get(apiDocumentation).then().statusCode(200);
+
     }
 }
