@@ -2,6 +2,8 @@ package Pages;
 
 import Engine.Bot;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 public class StudentSignUpPage {
 
@@ -37,6 +39,8 @@ public class StudentSignUpPage {
     String validEmail="Tester@tests.com";
 
     Bot sigUpBot;
+
+
 
     // 2. Constructor
 
@@ -81,7 +85,7 @@ public class StudentSignUpPage {
         sigUpBot.clickOn(studentCardLocator);
     }
 
-    public void enterValidFirstName()
+   /* public void enterValidFirstName()
     {
         sigUpBot.typeInto(firstNameFieldLocator,"Ahmed");
     }
@@ -90,8 +94,15 @@ public class StudentSignUpPage {
     {
         sigUpBot.typeInto(firstNameFieldLocator,"a");
     }
+*/
+    public void enterFirstName(String firstName)
+    {
+        sigUpBot.typeInto(firstNameFieldLocator,firstName);
 
-    public void enterValidLastName()
+    }
+
+
+  /*  public void enterValidLastName()
     {
         sigUpBot.typeInto(lastNameFieldLocator,"Tester");
     }
@@ -100,19 +111,30 @@ public class StudentSignUpPage {
     {
         sigUpBot.typeInto(lastNameFieldLocator,"k");
     }
+*/
 
-    public void enterValidEmail()
+    public void enterLastName(String lastName)
+    {
+        sigUpBot.typeInto(lastNameFieldLocator,lastName);
+    }
+
+
+   /* public void enterValidEmail()
     {
         sigUpBot.typeInto(emailFieldLocator,validEmail);
     }
-
 
     public void enterInvalidEmailFormat()
     {
         sigUpBot.typeInto(emailFieldLocator,"ads");
     }
+*/
+    public void enterEmail(String email)
+    {
+        sigUpBot.typeInto(emailFieldLocator,email);
+    }
 
-    public void enterValidPhoneNumber()
+    /*public void enterValidPhoneNumber()
     {
         sigUpBot.typeInto(phoneNumberFieldLocator,"1234567890");
     }
@@ -121,13 +143,18 @@ public class StudentSignUpPage {
     {
         sigUpBot.typeInto(phoneNumberFieldLocator,"1234578");
     }
+*/
+    public void enterPhoneNumber(String phoneNumber)
+    {
+        sigUpBot.typeInto(phoneNumberFieldLocator,phoneNumber);
+    }
 
     public void selectGrade()
     {
         sigUpBot.selectFromList(gradeSelectionMenuLocator,"primary-4");
     }
 
-    public void enterValidDateOfBirth()
+   /* public void enterValidDateOfBirth()
     {
         sigUpBot.typeInto(dateOfBirthFieldLocator,"02152015");
     }
@@ -136,9 +163,17 @@ public class StudentSignUpPage {
     {
         sigUpBot.typeInto(dateOfBirthFieldLocator,"02151999");
     }
+*/
+    public void enterDateOfBirth(String dateOfBirth)
+    {
+        String firsPart=dateOfBirth.substring(0,4);
+        String secondPart=dateOfBirth.substring(4);
+        sigUpBot.typeInto(dateOfBirthFieldLocator,firsPart);
+        sigUpBot.clickOnTabKey(dateOfBirthFieldLocator);
+        sigUpBot.typeInto(dateOfBirthFieldLocator,secondPart);
+    }
 
-
-    public void enterValidPassword()
+    /*public void enterValidPassword()
     {
     sigUpBot.typeInto(passwordFieldLocator,"A1234567");
     }
@@ -153,8 +188,12 @@ public class StudentSignUpPage {
         //password length is correct but doesn't have capital char.
         sigUpBot.typeInto(passwordFieldLocator,"12345678");
     }
-
-    public void confirmWithValidPassword()
+*/
+    public void enterPassword(String password)
+    {
+        sigUpBot.typeInto(passwordFieldLocator,password);
+    }
+    /*public void confirmWithValidPassword()
     {
         sigUpBot.typeInto(confirmPasswordFieldLocator,"A1234567");
     }
@@ -163,6 +202,12 @@ public class StudentSignUpPage {
     {
         sigUpBot.typeInto(confirmPasswordFieldLocator,"WrongPass123");
     }
+*/
+    public void confirmPassword(String confirmedPassword)
+    {
+        sigUpBot.typeInto(confirmPasswordFieldLocator,confirmedPassword);
+    }
+
 
     public void clickOnNextButton()
     {
@@ -214,6 +259,29 @@ public class StudentSignUpPage {
     {
         return  sigUpBot.popUpMessageDisplayedText();
     }
+
+    public void validInformationInputInFirstPageAndMoveToNextPage(String firstName,
+                                                 String lastName,
+                                                 String email,
+                                                 String phoneNumber,
+                                                 String dateOfBirth,
+                                                 String password,
+                                                 String confirmedPassword,
+                                                 String textToSelect )
+    {
+        sigUpBot.navigateTo(edvanceSignUpURL);
+        sigUpBot.clickOn(studentCardLocator);
+        sigUpBot.typeInto(firstNameFieldLocator,firstName);
+        sigUpBot.typeInto(lastNameFieldLocator,lastName);
+        sigUpBot.typeInto(emailFieldLocator,email);
+        sigUpBot.typeInto(phoneNumberFieldLocator,phoneNumber);
+        sigUpBot.selectFromList(gradeSelectionMenuLocator,textToSelect);
+        enterDateOfBirth(dateOfBirth);
+        sigUpBot.typeInto(passwordFieldLocator,password);
+        sigUpBot.typeInto(confirmPasswordFieldLocator,confirmedPassword);
+        sigUpBot.clickOn(nextButtonLocator);
+    }
+
 }
 
 

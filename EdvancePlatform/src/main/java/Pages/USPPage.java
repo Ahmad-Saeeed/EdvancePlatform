@@ -74,6 +74,7 @@ public class USPPage {
         navigate(1);
         uspBot.clickOn(viewProfileUsp);
     }
+    // TODO : CHECK API
     public void ensureCategoryNameAndNumeberOfCourses() {
         navigate(1);
         uspBot.clickOn(switchLanguage);

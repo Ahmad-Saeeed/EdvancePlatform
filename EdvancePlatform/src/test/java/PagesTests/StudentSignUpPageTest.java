@@ -2,10 +2,12 @@ package PagesTests;
 
 import Pages.StudentSignUpPage;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class StudentSignUpPageTest extends BaseTest
 {
+
 
     @Test
     public void platformLogoNavigation()
@@ -44,228 +46,124 @@ public class StudentSignUpPageTest extends BaseTest
     }
 
 
-
-
-
-
-    @Test (enabled = false) // disabled due to email is already used problem
-    public void successfulSigningUp()
+    @Test (dataProvider="signUp Data")
+    public void successfulSigningUp(
+            String firstName,
+            String lastName,
+            String email,
+            String phoneNumber,
+            String dataOfBirth,
+            String password,
+            String confirmedPassword,
+            String testCase
+                                    )
     {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
+        StudentSignUpPage signUpPage = new StudentSignUpPage(bot);
+        signUpPage.navigateToSignUpPage();
+        signUpPage.clickOnStudentCard();
+        signUpPage.enterFirstName(firstName);
+        signUpPage.enterLastName(lastName);
+        signUpPage.enterEmail(email);
+        signUpPage.enterPhoneNumber(phoneNumber);
+        signUpPage.selectGrade();
+        signUpPage.enterDateOfBirth(dataOfBirth);
+        signUpPage.enterPassword(password);
+        signUpPage.confirmPassword(confirmedPassword);
+        signUpPage.clickOnNextButton();
 
-        sUpPg.selectFavoriteSubjects();
-        sUpPg.selectYourGoal();
-        sUpPg.clickOnNextButton();
+        switch (testCase)
+        {
+            //Commenting the valid signup to avoid this account is registered already
+            /*case "Valid SignUp":
+                signUpPage.selectFavoriteSubjects();
+                signUpPage.selectYourGoal();
+                signUpPage.clickOnNextButton();
 
-        sUpPg.checkTheTermsAndConditionsBox();
-        sUpPg.clickOnCreateAccount();
+                signUpPage.checkTheTermsAndConditionsBox();
+                signUpPage.clickOnCreateAccount();
 
-        Assert.assertTrue(sUpPg.successfulSignupWelcomeMsgDisplayed()&& sUpPg.loginButtonInSuccessfulSignupDisplayed());
+                Assert.assertTrue(signUpPage.successfulSignupWelcomeMsgDisplayed()&& signUpPage.loginButtonInSuccessfulSignupDisplayed());
+                break;*/
+
+            case "First Name Mandatory":
+                Assert.assertTrue(signUpPage.errorMessageDisplayedText().contains("يجب أن يكون حرفين على الأقل"));
+            break;
+
+            case "Last Name Mandatory":
+                Assert.assertTrue(signUpPage.errorMessageDisplayedText().contains("يجب أن يكون حرفين على الأقل"));
+            break;
+
+            case "Email Field Mandatory":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),("البريد الإلكتروني غير صحيح"));
+                break;
+
+            case "Invalid Phone Number Mandatory":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"رقم الهاتف يجب أن يكون رقم مصري صحيح");
+                break;
+
+            case "Invalid date of birth":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"العمر يجب أن يكون بين 6 و 25 سنة");
+                break;
+
+            case "Invalid Password Length":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"كلمة المرور يجب أن تكون 8 أحرف على الأقل");
+                break;
+
+            case "Invalid Password Format":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"يجب أن تحتوي على حرف كبير واحد على الأقل");
+                break;
+
+            case "Wrong confirmation password":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"كلمات المرور غير متطابقة");
+                break;
+
+        }
+
 
     }
-
-
-    @Test
-    public void firstNameFieldMandatory()
+    @DataProvider(name="signUp Data")
+    public Object [][] signUpData()
     {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
+        return new Object[][] {
 
-        Assert.assertTrue(sUpPg.errorMessageDisplayedText().contains("يجب أن يكون حرفين على الأقل"));
-    }
+              //  {"Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234567","Valid SignUp"},
+                {"","tester","email@test.com","1234567890","07022002","A1234567","A1234567","First Name Mandatory"},
+                {"Test","","email@test.com","1234567890","07022002","A1234567","A1234567","Last Name Mandatory"},
+                {"Test","tester","","1234567890","07022002","A1234567","A1234567","Email Field Mandatory"},
+                {"Test","tester","email@test.com","12345678","07022002","A1234567","A1234567","Invalid Phone Number Mandatory"},
+                {"Test","tester","email@test.com","1234567890","07021998","A1234567","A1234567","Invalid date of birth"},
+                {"Test","tester","email@test.com","1234567890","07022002","A12345","A12345","Invalid Password Length"},
+                {"Test","tester","email@test.com","1234567890","07022002","12345678","12345678","Invalid Password Format"},
+                {"Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234566","Wrong confirmation password"},
 
-    @Test
-    public void lastNameFieldMandatory()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
-
-        Assert.assertTrue(sUpPg.errorMessageDisplayedText().contains("يجب أن يكون حرفين على الأقل"));
-    }
-
-    @Test
-    public void emailFieldMandatory()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
-
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),("البريد الإلكتروني غير صحيح"));
-    }
-
-    @Test
-    public void invalidPhoneNumber()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterInvalidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
-
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),"رقم الهاتف يجب أن يكون رقم مصري صحيح");
+        };
     }
 
     @Test
     public void gradeSelectionMandatory()
     {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
+        StudentSignUpPage signUpPage = new StudentSignUpPage(bot);
+       signUpPage.validInformationInputInFirstPageAndMoveToNextPage(
+               "Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234567", ""
+       );
 
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),"يرجى اختيار المرحلة الدراسية");
-    }
-
-    @Test
-    public void invalidDateOfBirth()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterInvalidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
-
-
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),"العمر يجب أن يكون بين 6 و 25 سنة");
-    }
-
-    @Test
-    public void invalidPassword_Length()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterInvalidPasswordLength();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
-
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),"كلمة المرور يجب أن تكون 8 أحرف على الأقل");
-    }
-
-    @Test
-    public void invalidPassword_Format()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterInvalidPasswordFormat();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
-
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),"يجب أن تحتوي على حرف كبير واحد على الأقل");
-    }
-
-    @Test
-    public void wrongConfirmationPassword()
-    {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithInvalidPassword();
-        sUpPg.clickOnNextButton();
-
-        Assert.assertEquals(sUpPg.errorMessageDisplayedText(),"كلمات المرور غير متطابقة");
+        Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"يرجى اختيار المرحلة الدراسية");
     }
 
     @Test
     public void termsAndConditionsCheckBoxMandatory()
     {
-        StudentSignUpPage sUpPg = new StudentSignUpPage(bot);
-        sUpPg.navigateToSignUpPage();
-        sUpPg.clickOnStudentCard();
-        sUpPg.enterValidFirstName();
-        sUpPg.enterValidLastName();
-        sUpPg.enterValidEmail();
-        sUpPg.enterValidPhoneNumber();
-        sUpPg.selectGrade();
-        sUpPg.enterValidDateOfBirth();
-        sUpPg.enterValidPassword();
-        sUpPg.confirmWithValidPassword();
-        sUpPg.clickOnNextButton();
+        StudentSignUpPage signUpPage = new StudentSignUpPage(bot);
+        signUpPage.validInformationInputInFirstPageAndMoveToNextPage(
+                "Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234567","primary-4"
+        );
 
-        sUpPg.selectFavoriteSubjects();
-        sUpPg.selectYourGoal();
-        sUpPg.clickOnNextButton();
-        sUpPg.clickOnCreateAccount();
+        signUpPage.selectFavoriteSubjects();
+        signUpPage.selectYourGoal();
+        signUpPage.clickOnNextButton();
+        signUpPage.clickOnCreateAccount();
 
-        Assert.assertEquals(sUpPg.popUpMsgContent(),"أوافق على الشروط والأحكام");
+        Assert.assertEquals(signUpPage.popUpMsgContent(),"أوافق على الشروط والأحكام");
 
     }
 

@@ -6,6 +6,7 @@ import java.time.Duration;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
@@ -129,5 +130,10 @@ public class Bot {
 
     public void sessionTearDown() {
         driver.quit();
+    }
+
+    public void clickOnTabKey(By elementLocator)
+    {
+        driver.findElement(elementLocator).sendKeys(Keys.TAB);
     }
 }
