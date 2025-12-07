@@ -2,57 +2,11 @@ package PagesTests;
 
 import Pages.StudentLoginPage;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class StudentLoginPageTest extends BaseTest
 {
-    @Test
-    public void successfulLoginTest_Student1()
-    {
-        StudentLoginPage logPG = new StudentLoginPage(bot);
-        logPG.navigateToLoginPage();
-        logPG.enterFirstValidEmail();
-        logPG.enterValidPassword();
-        logPG.clickONLoginButton();
-
-        Assert.assertTrue(logPG.welcomeMessageDisplayed());
-    }
-
-    @Test
-    public void successfulLoginTest_Student2()
-    {
-        StudentLoginPage logPG = new StudentLoginPage(bot);
-        logPG.navigateToLoginPage();
-        logPG.enterSecValidEmail();
-        logPG.enterValidPassword();
-        logPG.clickONLoginButton();
-
-        Assert.assertTrue(logPG.welcomeMessageDisplayed());
-    }
-
-    @Test
-    public void successfulLoginTest_Student3()
-    {
-        StudentLoginPage logPG = new StudentLoginPage(bot);
-        logPG.navigateToLoginPage();
-        logPG.enterThirdValidEmail();
-        logPG.enterValidPassword();
-        logPG.clickONLoginButton();
-
-        Assert.assertTrue(logPG.welcomeMessageDisplayed());
-    }
-
-    @Test
-    public void unsuccessfulLoginTest()
-    {
-        StudentLoginPage logPG = new StudentLoginPage(bot);
-        logPG.navigateToLoginPage();
-        logPG.enterInvalidEmail();
-        logPG.enterInvalidPassword();
-        logPG.clickONLoginButton();
-
-        Assert.assertTrue(logPG.errorMsgDisplayed());
-    }
 
     @Test
     public void forgetPasswordLinkTest()
@@ -63,21 +17,6 @@ public class StudentLoginPageTest extends BaseTest
 
         String loginPageURL="https://edvance-ace.vercel.app/login";
         String currentURL;
-
-        // check until URL changes (Manual way)
-        /*
-
-            do
-            {
-                currentURL=logPG.currentURL();
-
-            }while (currentURL.equals(loginPageURL));
-
-         */
-
-        // This function handles changing in the URL while maintaining waiting times out period
-        //i.e. if the url doesn't change it will give times out exception
-
         currentURL=logPG.currentURLAfterLoading(loginPageURL);
         Assert.assertTrue(currentURL.contains("forgot"));
 
@@ -160,7 +99,6 @@ public class StudentLoginPageTest extends BaseTest
 
     }
 
-
   /*
    @Test
     public void themeControlIcon()
@@ -173,6 +111,7 @@ public class StudentLoginPageTest extends BaseTest
 
     }
 */
+
 
     @Test
     public void languageTogglingTest()
@@ -224,7 +163,52 @@ public class StudentLoginPageTest extends BaseTest
 
     }
 
+    @Test (dataProvider = "Login Data")
+    public void loginForm(String email, String password, String testcase)
+    {
+        StudentLoginPage loginPage = new StudentLoginPage(bot);
+        loginPage.navigateToLoginPage();
+        loginPage.enterEmailAccount(email);
+        loginPage.enterPassword(password);
+        loginPage.clickONLoginButton();
 
+        switch (testcase)
+        {
+            case "Successful Login":
+                Assert.assertTrue(loginPage.welcomeMessageDisplayed());
+                break;
+            case "Invalid email account with correct password":
+                Assert.assertTrue(loginPage.errorMsgDisplayed());
+                break;
+            case "Invalid password with correct email account":
+                Assert.assertTrue(loginPage.errorMsgDisplayed());
+                break;
+
+            /*case "Invalid email format":
+               // Assert.assertTrue(loginPage.welcomeMessageDisplayed());
+                break;*/
+
+            case "Invalid password format":
+                Assert.assertTrue(loginPage.passwordFieldErrorMsgDisplayed());
+                break;
+        }
+
+    }
+
+    @DataProvider(name = "Login Data")
+    public Object[][] loginData()
+    {
+        return new Object[][]{
+                {"student1@test.com","password123","Successful Login"},
+                {"student2@test.com","password123","Successful Login"},
+                {"student3@test.com","password123","Successful Login"},
+                {"TestName@fake.com","password123","Invalid email account with correct password"},
+                {"student1@test.com","12345678","Invalid password with correct email account"},
+               // {"emailAccount","password123","Invalid email format"},
+                {"student1@test.com","1234567","Invalid password format"}
+
+        };
+    }
 
 
 

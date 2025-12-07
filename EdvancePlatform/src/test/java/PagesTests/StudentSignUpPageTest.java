@@ -45,7 +45,7 @@ public class StudentSignUpPageTest extends BaseTest
 
 
     @Test (dataProvider="signUp Data")
-    public void successfulSigningUp(
+    public void signingUpForm(
             String firstName,
             String lastName,
             String email,

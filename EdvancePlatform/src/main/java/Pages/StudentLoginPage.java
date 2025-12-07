@@ -22,17 +22,9 @@ public class StudentLoginPage {
     By languageIconLocator=By.xpath("//div[@id='languageIcon']");
     By loginLinkFromHeaderLocator=By.xpath("//a[contains(@href,'/login')]");
     By signUpButtonFromHeaderLocator=By.xpath("(//a[contains(@href,'/signup')])[1]");
-
+    By passwordFieldErrorMsgLocator=By.xpath("(//span[contains(@class,'fieldError')])");
 
     String edvanceLoginURL = "https://edvance-ace.vercel.app/login";
-    String validEmail_1 = "student1@test.com";
-    String validEmail_2 = "student2@test.com";
-    String validEmail_3 = "student3@test.com";
-    String validPassword = "password123";
-    String invalidEmail = "tester@test.com";
-    String invalidPassword = "TestPassword123";
-
-
 
     Bot loginBot;
 
@@ -44,28 +36,13 @@ public class StudentLoginPage {
         loginBot.navigateTo(edvanceLoginURL);
     }
 
-    public void enterFirstValidEmail() {
-        loginBot.typeInto(emailFieldLocator, validEmail_1);
+    public void enterEmailAccount(String email)
+    {
+        loginBot.typeInto(emailFieldLocator, email);
     }
 
-    public void enterSecValidEmail() {
-        loginBot.typeInto(emailFieldLocator, validEmail_2);
-    }
-
-    public void enterThirdValidEmail() {
-        loginBot.typeInto(emailFieldLocator, validEmail_3);
-    }
-
-    public void enterValidPassword() {
-        loginBot.typeInto(passwordFieldLocator, validPassword);
-    }
-
-    public void enterInvalidEmail() {
-        loginBot.typeInto(emailFieldLocator, invalidEmail);
-    }
-
-    public void enterInvalidPassword() {
-        loginBot.typeInto(passwordFieldLocator, invalidPassword);
+    public void enterPassword(String password) {
+        loginBot.typeInto(passwordFieldLocator, password);
     }
 
     public void clickONLoginButton() {
@@ -90,6 +67,11 @@ public class StudentLoginPage {
     public boolean errorMsgDisplayed()
     {
         return  loginBot.displayedText(errorMsgLocator).contains("فشل");
+    }
+
+    public boolean passwordFieldErrorMsgDisplayed()
+    {
+        return  loginBot.displayedText(passwordFieldErrorMsgLocator).contains("يجب أن تكون 8 أحرف على الأقل");
     }
 
     public  void clickOnForgerPassword()
