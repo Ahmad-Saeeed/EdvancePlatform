@@ -54,116 +54,51 @@ public class StudentSignUpPage {
     public void navigateToSignUpPage() {
         sigUpBot.navigateTo(edvanceSignUpURL);
     }
-
     public String currentURL() {
 
         return sigUpBot.currentURL();
     }
-
     public void clickOnPlatformLogo()
     {
         sigUpBot.clickOn(platformLogoInSignUpPageLocator);
     }
-
     public String currentURLAfterLoading(String oldURL)
     {
         return sigUpBot.getURLWhenItChanges(oldURL);
     }
-
     public void clickOnLoginLinkFromHeader()
     {
         sigUpBot.clickOn(loginLinkFromHeaderLocator);
     }
-
     public void clickOnLoginLinkFromForm()
     {
         sigUpBot.clickOn(loginLinkInFormContainerLocator);
     }
-
     public void clickOnStudentCard()
     {
         sigUpBot.clickOn(studentCardLocator);
     }
-
-   /* public void enterValidFirstName()
-    {
-        sigUpBot.typeInto(firstNameFieldLocator,"Ahmed");
-    }
-
-    public void enterInvalidFirstNameLength()
-    {
-        sigUpBot.typeInto(firstNameFieldLocator,"a");
-    }
-*/
     public void enterFirstName(String firstName)
     {
         sigUpBot.typeInto(firstNameFieldLocator,firstName);
 
     }
-
-
-  /*  public void enterValidLastName()
-    {
-        sigUpBot.typeInto(lastNameFieldLocator,"Tester");
-    }
-
-    public void enterInvalidLastNameLength()
-    {
-        sigUpBot.typeInto(lastNameFieldLocator,"k");
-    }
-*/
-
     public void enterLastName(String lastName)
     {
         sigUpBot.typeInto(lastNameFieldLocator,lastName);
     }
-
-
-   /* public void enterValidEmail()
-    {
-        sigUpBot.typeInto(emailFieldLocator,validEmail);
-    }
-
-    public void enterInvalidEmailFormat()
-    {
-        sigUpBot.typeInto(emailFieldLocator,"ads");
-    }
-*/
     public void enterEmail(String email)
     {
         sigUpBot.typeInto(emailFieldLocator,email);
     }
-
-    /*public void enterValidPhoneNumber()
-    {
-        sigUpBot.typeInto(phoneNumberFieldLocator,"1234567890");
-    }
-
-    public void enterInvalidPhoneNumber()
-    {
-        sigUpBot.typeInto(phoneNumberFieldLocator,"1234578");
-    }
-*/
     public void enterPhoneNumber(String phoneNumber)
     {
         sigUpBot.typeInto(phoneNumberFieldLocator,phoneNumber);
     }
-
-    public void selectGrade()
+    public void selectGrade(String grade)
     {
-        sigUpBot.selectFromList(gradeSelectionMenuLocator,"primary-4");
+        sigUpBot.selectFromList(gradeSelectionMenuLocator,grade);
     }
-
-   /* public void enterValidDateOfBirth()
-    {
-        sigUpBot.typeInto(dateOfBirthFieldLocator,"02152015");
-    }
-
-    public void enterInvalidDateOfBirth()
-    {
-        sigUpBot.typeInto(dateOfBirthFieldLocator,"02151999");
-    }
-*/
     public void enterDateOfBirth(String dateOfBirth)
     {
         String firsPart=dateOfBirth.substring(0,4);
@@ -172,113 +107,67 @@ public class StudentSignUpPage {
         sigUpBot.clickOnTabKey(dateOfBirthFieldLocator);
         sigUpBot.typeInto(dateOfBirthFieldLocator,secondPart);
     }
-
-    /*public void enterValidPassword()
-    {
-    sigUpBot.typeInto(passwordFieldLocator,"A1234567");
-    }
-
-    public void enterInvalidPasswordLength()
-    {
-        sigUpBot.typeInto(passwordFieldLocator,"A123456");
-    }
-
-    public void enterInvalidPasswordFormat()
-    {
-        //password length is correct but doesn't have capital char.
-        sigUpBot.typeInto(passwordFieldLocator,"12345678");
-    }
-*/
     public void enterPassword(String password)
     {
         sigUpBot.typeInto(passwordFieldLocator,password);
     }
-    /*public void confirmWithValidPassword()
-    {
-        sigUpBot.typeInto(confirmPasswordFieldLocator,"A1234567");
-    }
-
-    public void confirmWithInvalidPassword()
-    {
-        sigUpBot.typeInto(confirmPasswordFieldLocator,"WrongPass123");
-    }
-*/
     public void confirmPassword(String confirmedPassword)
     {
         sigUpBot.typeInto(confirmPasswordFieldLocator,confirmedPassword);
     }
-
-
     public void clickOnNextButton()
     {
         sigUpBot.clickOn(nextButtonLocator);
     }
-
     public void clickOnBackButton()
     {
         sigUpBot.clickOn(backButtonLocator);
     }
-
     public void selectFavoriteSubjects()
     {
         sigUpBot.clickOn(subject_1CheckBoxLocator);
         sigUpBot.clickOn(subject_2CheckBoxLocator);
     }
-
     public void selectYourGoal()
     {
         sigUpBot.selectFromList(goalSelectDropDownMenuLocator,"improve");
     }
-
     public void checkTheTermsAndConditionsBox()
     {
         sigUpBot.clickOn(acceptTermsCheckBoxLocator);
     }
-
     public void clickOnCreateAccount()
     {
         sigUpBot.clickOn(createProfileButtonLocator);
     }
-
     public boolean successfulSignupWelcomeMsgDisplayed()
     {
         return sigUpBot.displayedText(welcomeEdvanceLocator).contains("Success");
     }
-
     public boolean loginButtonInSuccessfulSignupDisplayed()
     {
         return sigUpBot.checkObjectDisplay(loginButtonSuccessLocator);
     }
-
     public String errorMessageDisplayedText()
     {
         return sigUpBot.displayedText(errorMsgLocator);
     }
-
     public String popUpMsgContent()
     {
         return  sigUpBot.popUpMessageDisplayedText();
     }
-
-    public void validInformationInputInFirstPageAndMoveToNextPage(String firstName,
-                                                 String lastName,
-                                                 String email,
-                                                 String phoneNumber,
-                                                 String dateOfBirth,
-                                                 String password,
-                                                 String confirmedPassword,
-                                                 String textToSelect )
+    public void validInformationInputInFirstPageAndMoveToNextPage()
     {
         sigUpBot.navigateTo(edvanceSignUpURL);
         sigUpBot.clickOn(studentCardLocator);
-        sigUpBot.typeInto(firstNameFieldLocator,firstName);
-        sigUpBot.typeInto(lastNameFieldLocator,lastName);
-        sigUpBot.typeInto(emailFieldLocator,email);
-        sigUpBot.typeInto(phoneNumberFieldLocator,phoneNumber);
-        sigUpBot.selectFromList(gradeSelectionMenuLocator,textToSelect);
-        enterDateOfBirth(dateOfBirth);
-        sigUpBot.typeInto(passwordFieldLocator,password);
-        sigUpBot.typeInto(confirmPasswordFieldLocator,confirmedPassword);
+        sigUpBot.typeInto(firstNameFieldLocator,"firstName");
+        sigUpBot.typeInto(lastNameFieldLocator,"lastName");
+        sigUpBot.typeInto(emailFieldLocator,"email@fake.com");
+        sigUpBot.typeInto(phoneNumberFieldLocator,"1234567890");
+        sigUpBot.selectFromList(gradeSelectionMenuLocator,"primary-4");
+        enterDateOfBirth("19032003");
+        sigUpBot.typeInto(passwordFieldLocator,"A1111111");
+        sigUpBot.typeInto(confirmPasswordFieldLocator,"A1111111");
         sigUpBot.clickOn(nextButtonLocator);
     }
 

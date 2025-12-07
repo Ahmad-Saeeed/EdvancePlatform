@@ -7,8 +7,6 @@ import org.testng.annotations.Test;
 
 public class StudentSignUpPageTest extends BaseTest
 {
-
-
     @Test
     public void platformLogoNavigation()
     {
@@ -52,6 +50,7 @@ public class StudentSignUpPageTest extends BaseTest
             String lastName,
             String email,
             String phoneNumber,
+            String grade,
             String dataOfBirth,
             String password,
             String confirmedPassword,
@@ -65,12 +64,13 @@ public class StudentSignUpPageTest extends BaseTest
         signUpPage.enterLastName(lastName);
         signUpPage.enterEmail(email);
         signUpPage.enterPhoneNumber(phoneNumber);
-        signUpPage.selectGrade();
+        signUpPage.selectGrade(grade);
         signUpPage.enterDateOfBirth(dataOfBirth);
         signUpPage.enterPassword(password);
         signUpPage.confirmPassword(confirmedPassword);
         signUpPage.clickOnNextButton();
 
+        /*Based on the test case will assert the result*/
         switch (testCase)
         {
             //Commenting the valid signup to avoid this account is registered already
@@ -83,8 +83,8 @@ public class StudentSignUpPageTest extends BaseTest
                 signUpPage.clickOnCreateAccount();
 
                 Assert.assertTrue(signUpPage.successfulSignupWelcomeMsgDisplayed()&& signUpPage.loginButtonInSuccessfulSignupDisplayed());
-                break;*/
-
+                break;
+*/
             case "First Name Mandatory":
                 Assert.assertTrue(signUpPage.errorMessageDisplayedText().contains("يجب أن يكون حرفين على الأقل"));
             break;
@@ -97,8 +97,12 @@ public class StudentSignUpPageTest extends BaseTest
                 Assert.assertEquals(signUpPage.errorMessageDisplayedText(),("البريد الإلكتروني غير صحيح"));
                 break;
 
-            case "Invalid Phone Number Mandatory":
+            case "Invalid Phone Number":
                 Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"رقم الهاتف يجب أن يكون رقم مصري صحيح");
+                break;
+
+            case "Grade selection mandatory":
+                Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"يرجى اختيار المرحلة الدراسية");
                 break;
 
             case "Invalid date of birth":
@@ -116,48 +120,16 @@ public class StudentSignUpPageTest extends BaseTest
             case "Wrong confirmation password":
                 Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"كلمات المرور غير متطابقة");
                 break;
-
         }
 
 
-    }
-    @DataProvider(name="signUp Data")
-    public Object [][] signUpData()
-    {
-        return new Object[][] {
-
-              //  {"Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234567","Valid SignUp"},
-                {"","tester","email@test.com","1234567890","07022002","A1234567","A1234567","First Name Mandatory"},
-                {"Test","","email@test.com","1234567890","07022002","A1234567","A1234567","Last Name Mandatory"},
-                {"Test","tester","","1234567890","07022002","A1234567","A1234567","Email Field Mandatory"},
-                {"Test","tester","email@test.com","12345678","07022002","A1234567","A1234567","Invalid Phone Number Mandatory"},
-                {"Test","tester","email@test.com","1234567890","07021998","A1234567","A1234567","Invalid date of birth"},
-                {"Test","tester","email@test.com","1234567890","07022002","A12345","A12345","Invalid Password Length"},
-                {"Test","tester","email@test.com","1234567890","07022002","12345678","12345678","Invalid Password Format"},
-                {"Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234566","Wrong confirmation password"},
-
-        };
-    }
-
-    @Test
-    public void gradeSelectionMandatory()
-    {
-        StudentSignUpPage signUpPage = new StudentSignUpPage(bot);
-       signUpPage.validInformationInputInFirstPageAndMoveToNextPage(
-               "Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234567", ""
-       );
-
-        Assert.assertEquals(signUpPage.errorMessageDisplayedText(),"يرجى اختيار المرحلة الدراسية");
     }
 
     @Test
     public void termsAndConditionsCheckBoxMandatory()
     {
         StudentSignUpPage signUpPage = new StudentSignUpPage(bot);
-        signUpPage.validInformationInputInFirstPageAndMoveToNextPage(
-                "Ahmed","Tester","testEmail@testing.com","1234567890","07022002","A1234567","A1234567","primary-4"
-        );
-
+        signUpPage.validInformationInputInFirstPageAndMoveToNextPage();
         signUpPage.selectFavoriteSubjects();
         signUpPage.selectYourGoal();
         signUpPage.clickOnNextButton();
@@ -167,5 +139,25 @@ public class StudentSignUpPageTest extends BaseTest
 
     }
 
+
+    /*Data provider method to provide needed data to the signUp form*/
+    @DataProvider(name="signUp Data")
+    public Object [][] signUpData()
+    {
+        return new Object[][] {
+
+                //  {"Ahmed","Tester","testEmail@testing.com","1234567890","primary-4","07022002","A1234567","A1234567","Valid SignUp"},
+                {"","tester","email@test.com","1234567890","primary-4","07022002","A1234567","A1234567","First Name Mandatory"},
+                {"Test","","email@test.com","1234567890","primary-4","07022002","A1234567","A1234567","Last Name Mandatory"},
+                {"Test","tester","","1234567890","primary-4","07022002","A1234567","A1234567","Email Field Mandatory"},
+                {"Test","tester","email@test.com","12345678","primary-4","07022002","A1234567","A1234567","Invalid Phone Number"},
+                {"Ahmed","Tester","testEmail@testing.com","1234567890","","07022002","A1234567","A1234567","Grade selection mandatory"},
+                {"Test","tester","email@test.com","1234567890","primary-4","07021998","A1234567","A1234567","Invalid date of birth"},
+                {"Test","tester","email@test.com","1234567890","primary-4","07022002","A12345","A12345","Invalid Password Length"},
+                {"Test","tester","email@test.com","1234567890","primary-4","07022002","12345678","12345678","Invalid Password Format"},
+                {"Ahmed","Tester","testEmail@testing.com","1234567890","primary-4","07022002","A1234567","A1234566","Wrong confirmation password"},
+
+        };
+    }
 
 }
