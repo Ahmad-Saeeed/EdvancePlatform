@@ -39,6 +39,8 @@ public class USPPage {
     };
     int categoryIndex = 0;
     By viewProfileUsp = By.xpath("//*[@class='UniversityDashboard-module__XZ3nra__primaryButton']");
+    By editProfile = By.xpath("//*[@class='UniversityProfile-module__lk0U8W__editButton']");
+    By uploadCV = By.xpath("//*[@class='UniversityProfile-module__lk0U8W__replaceButton']");
     By jobOpportunitiesUsp = By.xpath("//*[@class='UniversityDashboard-module__XZ3nra__secondaryButton']");
     By searchBoxDashboardUsp = By.xpath("//*[@class='UniversityDashboard-module__XZ3nra__searchInput __web-inspector-hide-shortcut__']");
     By courseCategoryUsp = By.xpath("//*[@class='UniversityDashboard-module__XZ3nra__categoryButton UniversityDashboard-module__XZ3nra__active']");
@@ -50,19 +52,23 @@ public class USPPage {
     By loginEmail = By.xpath("//*[@id='email']");
     By loginPassword = By.xpath("//*[@id='password']");
     By loginSubmit = By.xpath("//Button[@type='submit']");
-    String url = "https://edvance-ace.vercel.app/login";
-    String password = "password123";
+    String urlMain = "https://edvance-ace.vercel.app/login";
+    public String urlDashboard = "https://edvance-ace.vercel.app/university_student/dashboard";
+    public String urlProfile = "https://edvance-ace.vercel.app/university_student/profile";
+    public String password = "password123";
     public String expectedUsernameDisplayed;
     public String actualUsername;
     public String expectedCourseNumber;
     public String actualCourseNumber;
+    public String actualUrl;
+    public String expectedUrl;
     Bot uspBot;
 
     public void navigate(int neededUsers) {
         for (int userIndex = 0; userIndex < neededUsers; userIndex++) {
             uspBot = new Bot();
             String email = emails[userIndex];
-            uspBot.navigateTo(url);
+            uspBot.navigateTo(urlMain);
             uspBot.typeInto(loginEmail, email);
             uspBot.typeInto(loginPassword, password);
             uspBot.clickOn(loginSubmit);
@@ -72,8 +78,17 @@ public class USPPage {
     }
     public void goToProfile() {
         navigate(1);
+        actualUrl = uspBot.currentURL();
         uspBot.clickOn(viewProfileUsp);
+expectedUrl = uspBot.currentURL();
     }
+
+    public void setEditProfile(){
+        goToProfile();
+        uspBot.clickOn(editProfile);
+        uspBot.clickOn(uploadCV);
+    }
+
     // TODO : CHECK API
     public void ensureCategoryNameAndNumeberOfCourses() {
         navigate(1);
