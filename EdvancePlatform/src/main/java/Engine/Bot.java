@@ -136,4 +136,14 @@ public class Bot {
     {
         driver.findElement(elementLocator).sendKeys(Keys.TAB);
     }
+    public void clickOnEnterKey(By elementLocator)
+    {
+        driver.findElement(elementLocator).sendKeys(Keys.ENTER);
+    }
+
+    public void searchAndClickEnter( By elementLocator,String searchedText)
+    {
+        driver.findElement(elementLocator).sendKeys(searchedText);
+        driver.findElement(elementLocator).sendKeys(Keys.ENTER);
+    }
 }
