@@ -2,10 +2,11 @@ package PagesTests;
 
 import Engine.Bot;
 import Pages.USPPage;
+import ParallelExecution.ParallelBaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class USPTest extends BaseTest{
+public class USPTest extends ParallelBaseTest {
     USPPage uspPage = new USPPage();
     Bot uspBot;
     @Test
@@ -16,7 +17,10 @@ public class USPTest extends BaseTest{
     @Test
     public void ClickProfileButtonAfterLogin(){
         uspPage.goToProfile();
+        Assert.assertEquals(uspPage.actualUrl, uspPage.expectedUrl);
     }
+
+
     @Test
     public void CheckingCourseNumberafterFilteringCategories(){
         uspPage.ensureCategoryNameAndNumeberOfCourses();
