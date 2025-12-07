@@ -119,5 +119,27 @@ public class TeacherDashBoardPageTest extends BaseTest {
         dashBoard.clickCreateNewCourse();
         Assert.assertTrue(dashBoard.checkCreateNewCoursePageLanding());
     }
+    @Test
+    public void createNewCourseandDeleteIT(){
+        TeacherDashBoardPage dashBoard = new TeacherDashBoardPage(bot);
+        TeacherLoginPage loginPage = new TeacherLoginPage(bot);
+        loginPage.navigateandValidLogin();
+        dashBoard.clickCreateNewCourse();
+        dashBoard.enterCourseTittle();
+        dashBoard.enterCourseDescription();
+        dashBoard.enterSubject();
+        dashBoard.chooseFromList();
+        dashBoard.clickNextButton();
+        dashBoard.enterCoursePrice();
+        dashBoard.enterCourseDuration();
+        dashBoard.enterCourseNumofLessons();
+        dashBoard.clickCreateCourseButton();
+        Assert.assertTrue(dashBoard.verifyCourseAdded());
+        dashBoard.clickDeleteButtonofTheNewCourse();
+        dashBoard.acceptDeletePopupMessage();
+        dashBoard.verifyPageRelod();
+        Assert.assertTrue(dashBoard.verifytheCourseDeleted());
+
+    }
 
 }
