@@ -15,7 +15,7 @@ public class TeacherDashBoardPage {
     By profileLocator = By.xpath("//a[@class='TeacherNav-module__X_bpXW__dropdownItem'][1]");
     By earningsLocator = By.xpath("//a[@class='TeacherNav-module__X_bpXW__dropdownItem'][2]");
     By logOutLocator = By.xpath("//button[@class='TeacherNav-module__X_bpXW__dropdownItem']");
-    By createNewCourseLocator = By.xpath("//*[normalize-space(text())='Create New Course']");
+    By createNewCourseLocator = By.xpath("//*[normalize-space(text())='Create New Course' or normalize-space(text())='إنشاء دورة جديدة']");
     By lectureScheduleLocator = By.xpath("//*[normalize-space(text())='Create New Course']");
     By manageStudentsLocators = By.xpath("//*[normalize-space(text())='Manage Students']");
     By togglestatusLocator = By.xpath("//*[name()='svg' and contains(@class, 'ThemeToggle')]");
@@ -25,11 +25,26 @@ public class TeacherDashBoardPage {
     By specializationLocator = By.xpath("//input[@placeholder='Specialization (e.g. Mathematics, Science, Arabic...)' or @placeholder='التخصص (مثال: رياضيات، علوم، لغة عربية...)']");
     By yearsOfExperienceLocator = By.xpath("//input[@placeholder='Number of years of experience' or @placeholder='عدد سنوات الخبرة']");
     By saveChangesLocator = By.xpath("//button[@class='TeacherProfile-module__bKMAXG__saveButton']");
+    By courseTitleLocator = By.xpath("//input[@id='title']");
+    By courseDescriptionLocator = By.xpath("//textarea[@id='description']");
+    By subjectLocator = By.xpath("//button[@class='CreateCourse-module__m3N4xW__categoryButton '][3]");
+    By selectLocator = By.xpath("//select[@id='grade']");
+    By selectOptionLocator = By.xpath("//option[@value='primary_1']");
+    By nextButtonLocator = By.xpath("//*[normalize-space(text())='Next' or normalize-space(text())='التالي']");
+    By coursePriceLocator = By.xpath("//input[@id='price']");
+    By courseDurationLocator = By.xpath("//input[@id='duration']");
+    By courseNumofLessons = By.xpath("//input[@id='lessons_count']");
+    By createCourseLocator = By.xpath("//*[normalize-space(text())='إنشاء الكورس']");
+    By courseNumbersinHome = By.xpath("//*[normalize-space(text())='All' or normalize-space(text())='الكل']");
+    By deleteButtonofTheAddedCourse = By.xpath("(//button[contains(@class,'deleteButton')])[16]");
+
+
 
     String loginUrl = "https://edvance-ace.vercel.app/login";
     String dashBoardUrl = "https://edvance-ace.vercel.app/teacher/dashboard";
     String specilizationFieldValue = "Science";
     String yearsOfExFieldValue = "10";
+    String valueToChoose = "الصف الأول الابتدائي";
 
     Bot dashBoardBot;
 
@@ -157,6 +172,51 @@ public class TeacherDashBoardPage {
     public boolean checkCreateNewCoursePageLanding(){
         return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("create");
     }
+    public void enterCourseTittle(){
+        dashBoardBot.typeInto(courseTitleLocator,"Software Testing Course");
+    }
+    public void enterCourseDescription(){
+        dashBoardBot.typeInto(courseDescriptionLocator,"Apply now to get the full software testing course");
+    }
+    public void enterSubject(){
+        dashBoardBot.clickOn(subjectLocator);
+    }
+    public void chooseFromList(){
+        dashBoardBot.clickOn(selectLocator);
+        dashBoardBot.clickOn(selectOptionLocator);
+    }
+    public void clickNextButton(){
+        dashBoardBot.clickOn(nextButtonLocator);
+    }
+    public void enterCoursePrice(){
+        dashBoardBot.typeInto(coursePriceLocator,"100");
+    }
+    public void enterCourseDuration(){
+        dashBoardBot.typeInto(courseDurationLocator,"10");
+    }
+    public void enterCourseNumofLessons(){
+        dashBoardBot.typeInto(courseNumofLessons,"20");
+    }
+    public void clickCreateCourseButton(){
+        dashBoardBot.clickOn(createCourseLocator);
+    }
+    public boolean verifyCourseAdded(){
+        return dashBoardBot.displayedText(courseNumbersinHome).contains("16");
+    }
+    public void clickDeleteButtonofTheNewCourse(){
+        dashBoardBot.clickOn(deleteButtonofTheAddedCourse);
+    }
+    public void acceptDeletePopupMessage(){
+        dashBoardBot.popUpMessageOK();
+    }
+    public void verifyPageRelod(){
+        dashBoardBot.clickOn(notificationLocator);}
+    public boolean verifytheCourseDeleted(){
+        return dashBoardBot.displayedText(courseNumbersinHome).contains("15");
+    }
+
+
+
 
 
 }

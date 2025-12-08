@@ -99,5 +99,9 @@ public class StudentDashBoardPage {
         dashBoardPageBot.clickOn(searchButtonOfSearchByTeacherNameFieldLocator);
     }
 
+    public String currentURLAfterLoading(String oldURL)
+    {
+        return dashBoardPageBot.getURLWhenItChanges(oldURL);
+    }
 
 }

@@ -129,7 +129,13 @@ public class StudentLoginPage {
         loginBot.clickOn(platformLogoInLoginPageLocator);
     }
 
-
+    public void successfulLogin()
+    {
+       navigateToLoginPage();
+       enterEmailAccount("student1@test.com");
+       enterPassword("password123");
+       clickONLoginButton();
+    }
 
 
 }
