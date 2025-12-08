@@ -15,7 +15,7 @@ public class Bot {
     ChromeOptions options;
     WebDriver driver;
     Wait<WebDriver> wait;
-
+//bot
     public Bot() {
         options = new ChromeOptions().addArguments("--start-maximized").addArguments("--incognito");
 
