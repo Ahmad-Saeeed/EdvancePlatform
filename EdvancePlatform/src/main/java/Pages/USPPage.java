@@ -1,6 +1,7 @@
 package Pages;
 
 import Engine.Bot;
+
 import org.openqa.selenium.By;
 public class USPPage {
     String[] categories = {
@@ -64,7 +65,7 @@ public class USPPage {
     public String expectedUrl;
     Bot uspBot;
 
-    public void navigate(int neededUsers) {
+    public void UniversityStudentProfileNavigation(int neededUsers) {
         for (int userIndex = 0; userIndex < neededUsers; userIndex++) {
             uspBot = new Bot();
             String email = emails[userIndex];
@@ -76,8 +77,9 @@ public class USPPage {
             actualUsername = uspBot.displayedText(username);
         }
     }
+
     public void goToProfile() {
-        navigate(1);
+        UniversityStudentProfileNavigation(1);
         actualUrl = uspBot.currentURL();
         uspBot.clickOn(viewProfileUsp);
 expectedUrl = uspBot.currentURL();
@@ -91,7 +93,7 @@ expectedUrl = uspBot.currentURL();
 
     // TODO : CHECK API
     public void ensureCategoryNameAndNumeberOfCourses() {
-        navigate(1);
+        UniversityStudentProfileNavigation(1);
         uspBot.clickOn(switchLanguage);
         for (categoryIndex=0; categoryIndex < categories.length; categoryIndex++) {
             By filterCoursesSelectCategory = By.xpath(String.format(

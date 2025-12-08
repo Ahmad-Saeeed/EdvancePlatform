@@ -11,7 +11,7 @@ public class USPTest extends ParallelBaseTest {
     Bot uspBot;
     @Test
     public void AllStudentsNavigateTest(){
-        uspPage.navigate(5);
+        uspPage.UniversityStudentProfileNavigation(5);
         Assert.assertEquals(uspPage.actualUsername, uspPage.expectedUsernameDisplayed);
     }
     @Test

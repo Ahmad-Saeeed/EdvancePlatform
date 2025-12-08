@@ -30,9 +30,9 @@ public abstract class ParallelBaseTest {
 //            options.addArguments("--guest");
             driver = new EdgeDriver(options);
         }
-//        else {
-//            throw new IllegalArgumentException("Unsupported browser: " + browser);
-//        }
+        else {
+            throw new IllegalArgumentException("Unsupported browser: " + browser);
+        }
         overrideSetupMethodWhenNeeded();
     }
 
