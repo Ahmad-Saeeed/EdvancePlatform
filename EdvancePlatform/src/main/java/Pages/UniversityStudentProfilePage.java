@@ -3,7 +3,7 @@ package Pages;
 import Engine.Bot;
 
 import org.openqa.selenium.By;
-public class USPPage {
+public class UniversityStudentProfilePage {
     String[] categories = {
             "All Specializations",
             "Programming",
