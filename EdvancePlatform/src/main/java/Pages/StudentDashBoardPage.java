@@ -4,8 +4,11 @@ import Engine.Bot;
 import org.openqa.selenium.By;
 
 public class StudentDashBoardPage {
-
+    //Variables
+    Bot dashBoardPageBot;
     String studentDashboardURL="https://edvance-ace.vercel.app/student/dashboard";
+
+    //Locators
     By edvanceLogoLocator=By.xpath("//a[contains(@class,'logoDesktop')]");
     By studentDashboardOptionLocator=By.xpath("(//span[contains(@class,'navIcon')])[1]");
     By myCoursesNavigationButtonLocator=By.xpath("(//span[contains(@class,'navIcon')])[2]");
@@ -21,13 +24,14 @@ public class StudentDashBoardPage {
     By searchButtonOfSearchByTeacherNameFieldLocator=By.xpath("(//button[@type='submit'])");
 
 
-    Bot dashBoardPageBot;
 
+    //Constructor
     public StudentDashBoardPage (Bot bot)
     {
         dashBoardPageBot = bot;
     }
 
+    //Page Actions
     public void navigateToStudentDashBoard()
     {
         dashBoardPageBot.navigateTo(studentDashboardURL);

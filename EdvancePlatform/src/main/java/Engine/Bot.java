@@ -17,6 +17,7 @@ public class Bot {
     Wait<WebDriver> wait;
 //bot
     public Bot() {
+
         options = new ChromeOptions().addArguments("--start-maximized").addArguments("--incognito");
 
         //Suggested edit 1
@@ -57,6 +58,7 @@ public class Bot {
             return f.getCurrentUrl();
         });
     }
+
     /*==================================================================================================
        * Description:
             The following method handles changing in the URL while maintaining waiting times out period
@@ -78,52 +80,48 @@ public class Bot {
              that why it should be handled using the times out period of the fluent wait
               that's why this method is better to handle this
      ==================================================================================================*/
-    public String getURLWhenItChanges(String oldURL)
-    {
-        String crrnturl="randomText";
-        wait.until(d->!(d.getCurrentUrl().equals(oldURL)));
+    public String getURLWhenItChanges(String oldURL) {
+        String crrnturl = "randomText";
+        wait.until(d -> !(d.getCurrentUrl().equals(oldURL)));
         return driver.getCurrentUrl();
     }
 
     /*====================================================================================================*/
 
     public String displayedText(By displayedTextLocator) {
-        return wait.until(f->
+        return wait.until(f ->
         {
             return f.findElement(displayedTextLocator).getText();
         });
     }
 
-    public void selectFromList(By listLocator, String textToSelect)
-    {
-        wait.until(f->{
-            Select select =new Select(f.findElement(listLocator));
+    public void selectFromList(By listLocator, String textToSelect) {
+        wait.until(f -> {
+            Select select = new Select(f.findElement(listLocator));
             select.selectByValue(textToSelect);
             return true;
         });
 
     }
 
-    public void popUpMessageOK()
-    {
+    public void popUpMessageOK() {
         Alert alert = driver.switchTo().alert();
         alert.accept();
     }
 
-    public String popUpMessageDisplayedText()
-    {
+    public String popUpMessageDisplayedText() {
         Alert alert = driver.switchTo().alert();
         return alert.getText();
     }
 
-    public boolean checkObjectDisplay(By objectLocator)
-    {
-        return wait.until(f->{
+    public boolean checkObjectDisplay(By objectLocator) {
+        return wait.until(f -> {
             return f.findElement(objectLocator).isDisplayed();
         });
     }
-    public String getClassAttribute(By locator){
-        return wait.until(d->{
+
+    public String getClassAttribute(By locator) {
+        return wait.until(d -> {
             return d.findElement(locator).getAttribute("class");
         });
     }
@@ -132,17 +130,15 @@ public class Bot {
         driver.quit();
     }
 
-    public void clickOnTabKey(By elementLocator)
-    {
+    public void clickOnTabKey(By elementLocator) {
         driver.findElement(elementLocator).sendKeys(Keys.TAB);
     }
-    public void clickOnEnterKey(By elementLocator)
-    {
+
+    public void clickOnEnterKey(By elementLocator) {
         driver.findElement(elementLocator).sendKeys(Keys.ENTER);
     }
 
-    public void searchAndClickEnter( By elementLocator,String searchedText)
-    {
+    public void searchAndClickEnter(By elementLocator, String searchedText) {
         driver.findElement(elementLocator).sendKeys(searchedText);
         driver.findElement(elementLocator).sendKeys(Keys.ENTER);
     }
