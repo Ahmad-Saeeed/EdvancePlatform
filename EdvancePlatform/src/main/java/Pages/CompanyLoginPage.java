@@ -7,7 +7,7 @@ public class CompanyLoginPage {
 
         public WebDriver driver;
 
-        // --- PUBLIC Locators ---
+        //   Locators
         public By EmailField = By.xpath("//input[@id='email']");
         public By PasswordField = By.xpath("//input[@id='password']");
         public By LoginButton = By.xpath("//button[@class='Login-module__qAm00G__submitButton']");
@@ -18,36 +18,36 @@ public class CompanyLoginPage {
             this.driver = driver;
         }
 
-        // --- Navigate to Login Page ---
+        // Navigate to Login Page
         public void navigateToLoginPage() {
             driver.get("https://edvance-ace.vercel.app/login");
         }
 
-        // --- Enter Email ---
+        // Enter Email
         public void enterValidEmail(String email) {
             driver.findElement(EmailField).clear();
             driver.findElement(EmailField).sendKeys(email);
         }
 
-        // --- Enter Password ---
+        //  Enter Password
         public void enterValidPassword(String password) {
             driver.findElement(PasswordField).clear();
             driver.findElement(PasswordField).sendKeys(password);
         }
 
-        // --- Click Login ---
+        //  Click Login
         public void clickLogin() {
             driver.findElement(LoginButton).click();
         }
 
-        // --- Shortcut Login Method (optional but useful) ---
+
         public void login(String email, String password) {
             enterValidEmail(email);
             enterValidPassword(password);
             clickLogin();
         }
 
-        // --- Read Error Message ---
+
         public String getErrorMessage() {
             return driver.findElement(ErrorMessage).getText();
         }
