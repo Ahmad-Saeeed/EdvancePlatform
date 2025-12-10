@@ -3,6 +3,7 @@ package Engine;
 
 import java.time.Duration;
 
+import Utilities.LoggerFactory;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -33,20 +34,23 @@ public class Bot {
 
     public void navigateTo(String URL) {
         driver.navigate().to(URL);
+        LoggerFactory.logInfo("Navigated to: "+URL);
     }
 
     public void clickOn(By objectLocator) {
         wait.until((f) -> {
             f.findElement(objectLocator).click();
+          //  LoggerFactory.logInfo("Clicked on ", objectLocator.toString());
             return true;
         });
     }
 
     public void typeInto(By fieldLocator, String text) {
         wait.until((f) -> {
-            f.findElement(fieldLocator).click();
             f.findElement(fieldLocator).clear();
             f.findElement(fieldLocator).sendKeys(text);
+            LoggerFactory.logInfo("Typed \"",text,"\""," into the field");
+
             return true;
         });
     }
@@ -99,6 +103,7 @@ public class Bot {
         wait.until(f -> {
             Select select = new Select(f.findElement(listLocator));
             select.selectByValue(textToSelect);
+            LoggerFactory.logInfo("Option Selected: ",textToSelect);
             return true;
         });
 
@@ -127,15 +132,18 @@ public class Bot {
     }
 
     public void sessionTearDown() {
+        LoggerFactory.logInfo("Closing the Session");
         driver.quit();
     }
 
     public void clickOnTabKey(By elementLocator) {
         driver.findElement(elementLocator).sendKeys(Keys.TAB);
+        LoggerFactory.logInfo("TAB key is clicked");
     }
 
     public void clickOnEnterKey(By elementLocator) {
         driver.findElement(elementLocator).sendKeys(Keys.ENTER);
+        LoggerFactory.logInfo("Enter key is clicked");
     }
 
     public void searchAndClickEnter(By elementLocator, String searchedText) {
