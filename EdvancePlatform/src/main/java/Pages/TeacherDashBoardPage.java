@@ -114,7 +114,7 @@ public class TeacherDashBoardPage {
 
     public void enterInSpecializationField() {
         dashBoardBot.clickOn(specializationLocator);
-        dashBoardBot.typeInto(specializationLocator,  ConfigReader.getProperty("teacher.specialization"));
+        dashBoardBot.typeInto(specializationLocator, ConfigReader.getProperty("teacher.specialization"));
     }
 
     public void enterInSpecializationyearsOfExField() {
@@ -191,7 +191,7 @@ public class TeacherDashBoardPage {
     }
 
     public void enterCourseDuration() {
-        dashBoardBot.typeInto(courseDurationLocator,ConfigReader.getProperty("course.duration"));
+        dashBoardBot.typeInto(courseDurationLocator, ConfigReader.getProperty("course.duration"));
     }
 
     public void enterCourseNumofLessons() {

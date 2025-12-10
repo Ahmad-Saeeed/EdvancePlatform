@@ -4,9 +4,9 @@ import Pages.TeacherSignUpPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TeacherSignUpPageTest extends BaseTest{
+public class TeacherSignUpPageTest extends BaseTest {
     @Test
-    public void successfullSignUpTest(){
+    public void successfullSignUpTest() {
         TeacherSignUpPage signUpPage = new TeacherSignUpPage(bot);
         signUpPage.navigateToSignUpPage();
         signUpPage.selectInstructorField();
@@ -18,7 +18,7 @@ public class TeacherSignUpPageTest extends BaseTest{
         signUpPage.enterConfirmPassword();
         signUpPage.nextButtonClick();
         signUpPage.verifyButtonClick();
-        Assert.assertTrue(signUpPage.signUpPageLanding());
+        Assert.assertTrue(signUpPage.signUpPageLanding(), "Failed: Sign up was NOT successful — sign-up confirmation page did NOT load!");
 
     }
 }
