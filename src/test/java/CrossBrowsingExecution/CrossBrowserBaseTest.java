@@ -1,4 +1,4 @@
-package ParallelExecution;
+package CrossBrowsingExecution;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-public abstract class ParallelBaseTest {
+public abstract class CrossBrowserBaseTest {
     protected WebDriver driver;
 
     @Parameters("browser")

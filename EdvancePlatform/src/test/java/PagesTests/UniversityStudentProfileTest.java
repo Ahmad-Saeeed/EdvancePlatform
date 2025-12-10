@@ -1,12 +1,16 @@
 package PagesTests;
 
+import ExcelTest.ExcelDataProvider;
 import Pages.UniversityStudentProfilePage;
-import ParallelExecution.ParallelBaseTest;
+import CrossBrowsingExecution.CrossBrowserBaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+//import static DataProviders.Excel.ExcelUtilsData.sheetIndex;
 
-public class UniversityStudentProfileTest extends ParallelBaseTest {
+
+public class UniversityStudentProfileTest extends CrossBrowserBaseTest {
     UniversityStudentProfilePage universityStudentProfilePage = new UniversityStudentProfilePage();
+    private static int sheetIndex = 0;
 
     @Test
     public void AllStudentsNavigateTest(){
@@ -24,5 +28,19 @@ public class UniversityStudentProfileTest extends ParallelBaseTest {
     public void CheckingCourseNumberafterFilteringCategories(){
         universityStudentProfilePage.ensureCategoryNameAndNumeberOfCourses();
         Assert.assertEquals(universityStudentProfilePage.actualCourseNumber, universityStudentProfilePage.expectedCourseNumber);
+    }
+
+    @Test (dataProvider = "credentialsData",dataProviderClass = ExcelDataProvider.class)
+    public void TestLoginUsingExcelSheet(String username, String password) throws Exception{
+//        int sheetNumber =1;
+//        ExcelDataProvider.getExcelData(sheetNumber);
+       // sheetIndex = 4;
+        universityStudentProfilePage.UniversityStudentLoginUsingExcelData(username, password);
+    }
+
+    @Test(dataProvider = "credentialsData", dataProviderClass = ExcelDataProvider.class)
+    public void PrintToConsoleExcelDataTest(String username, String password) {
+        //This method is opened chrome 5 times once per row in excel sheet and print to console its name
+        System.out.println("Testing with Username: " + username + " and Password: " + password);
     }
 }

@@ -4,6 +4,8 @@ import Engine.Bot;
 
 import org.openqa.selenium.By;
 public class UniversityStudentProfilePage {
+
+
     String[] categories = {
             "All Specializations",
             "Programming",
