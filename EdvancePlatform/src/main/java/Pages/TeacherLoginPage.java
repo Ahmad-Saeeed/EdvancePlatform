@@ -1,6 +1,7 @@
 package Pages;
 
 import Engine.Bot;
+import Utilities.ConfigReader;
 import org.openqa.selenium.By;
 
 public class TeacherLoginPage {
@@ -22,15 +23,6 @@ public class TeacherLoginPage {
     By togglestatusLocator = By.xpath("//*[name()='svg' and contains(@class, 'ThemeToggle')]");
     By languageContentLocator = By.xpath("//span[@class='LanguageSwitcher-module__CeKvmG__languageText']");
 
-    String edvanceURL = "https://edvance-ace.vercel.app/login";
-    String edvanceForrgotPasswordURL = "https://edvance-ace.vercel.app/forgot-passw";
-    public static String validEmail1 = "ahmed.mohamed@teacher.com";
-    public static String validEmail2 = "fatma.ali@teacher.com";
-    public static String validEmail3 = "mahmoud.hassan@teacher.com";
-    public static String validEmail4 = "karim.youssef@teacher.com";
-    public static String invalidEmail = "abcd@teacher.com";
-    public static String validPassword = "password123";
-    public static String invalidPassword = "password321";
     Bot loginBot;
 
     public TeacherLoginPage(Bot bot) {
@@ -38,7 +30,7 @@ public class TeacherLoginPage {
     }
 
     public void navigateToLoginPage() {
-        loginBot.navigateTo(edvanceURL);
+        loginBot.navigateTo(ConfigReader.getProperty("login.url"));
     }
 
     public void enterEmail(String email){
@@ -50,9 +42,9 @@ public class TeacherLoginPage {
 
     //General valid navigate and login method to use in the rest of the teacher pages
     public void navigateandValidLogin(){
-        loginBot.navigateTo(edvanceURL);
-        loginBot.typeInto(loginEmailLocator,validEmail1);
-        loginBot.typeInto(loginPasswordLocator,validPassword);
+        loginBot.navigateTo(ConfigReader.getProperty("login.url"));
+        loginBot.typeInto(loginEmailLocator,ConfigReader.getProperty("teacher1Email"));
+        loginBot.typeInto(loginPasswordLocator,ConfigReader.getProperty("teacher.validPassword"));
         loginBot.clickOn(loginButtonLocator);
     }
 
@@ -73,7 +65,7 @@ public class TeacherLoginPage {
     }
 
     public boolean checkForggotPassPagelanding() {
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("forgot-password");
+        return loginBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("forgot-password");
     }
 
     public void registerNowClick() {
@@ -81,7 +73,7 @@ public class TeacherLoginPage {
     }
 
     public boolean checkRegisterPageLanding() {
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("signup");
+        return loginBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("signup");
     }
 
     public void featureClick() {
@@ -89,7 +81,7 @@ public class TeacherLoginPage {
     }
 
     public boolean checkFeaturePageLanding() {
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("features");
+        return loginBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("features");
     }
 
     public void aboutUsClick() {
@@ -97,7 +89,7 @@ public class TeacherLoginPage {
     }
 
     public boolean checkAboutUsPageLanding() {
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("about");
+        return loginBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("about");
     }
 
     public void contactUsClick() {
@@ -105,7 +97,7 @@ public class TeacherLoginPage {
     }
 
     public boolean checkContactUsPageLanding() {
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("contact");
+        return loginBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("contact");
     }
 
     public void themeToggleLClick() {
@@ -129,7 +121,7 @@ public class TeacherLoginPage {
     }
 
     public boolean checkJoinFreePageLanding() {
-        return loginBot.getURLWhenItChanges(edvanceURL).contains("signup");
+        return loginBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("signup");
     }
 
 

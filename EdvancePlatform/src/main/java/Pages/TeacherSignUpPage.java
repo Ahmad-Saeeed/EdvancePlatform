@@ -1,6 +1,7 @@
 package Pages;
 
 import Engine.Bot;
+import Utilities.ConfigReader;
 import org.openqa.selenium.By;
 
 public class TeacherSignUpPage {
@@ -14,19 +15,19 @@ public class TeacherSignUpPage {
     By nextLocator = By.xpath("//button[@class='Signup-module__5az0ga__nextButton']");
     By verifyButtonLocator = By.xpath("//button[@class='Signup-module__5az0ga__verifyButton']");
 
-    String lasturl = "https://verify.didit.me/session/KrbYP4CYjh8k";
-    String signUpURL = "https://edvance-ace.vercel.app/signup";
-    String firstNAme ="Ahmed";
-    String lastName ="Mohamed";
-    String email = "ahmedmohamed@teacher.com";
-    String phoneNumber = "01212345678";
-    String password = "ahmedMohamed123";
-    String confirmPassword = "ahmedMohamed123";
+
+    String signUpURL = ConfigReader.getProperty("signUpURL");
+    String firstNAme = ConfigReader.getProperty("firstNAme");
+    String lastName = ConfigReader.getProperty("lastName");
+    String email = ConfigReader.getProperty("email");
+    String phoneNumber = ConfigReader.getProperty("phoneNumber");
+    String password = ConfigReader.getProperty("password");
+    String confirmPassword = ConfigReader.getProperty("confirmPassword");
 
     Bot signUpBot;
 
     public TeacherSignUpPage(Bot bot){
-         signUpBot =bot;
+        signUpBot =bot;
     }
     public void navigateToSignUpPage(){
         signUpBot.navigateTo(signUpURL);

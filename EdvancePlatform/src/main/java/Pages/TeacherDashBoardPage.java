@@ -1,6 +1,7 @@
 package Pages;
 
 import Engine.Bot;
+import Utilities.ConfigReader;
 import org.openqa.selenium.By;
 
 public class TeacherDashBoardPage {
@@ -16,8 +17,6 @@ public class TeacherDashBoardPage {
     By earningsLocator = By.xpath("//a[@class='TeacherNav-module__X_bpXW__dropdownItem'][2]");
     By logOutLocator = By.xpath("//button[@class='TeacherNav-module__X_bpXW__dropdownItem']");
     By createNewCourseLocator = By.xpath("//*[normalize-space(text())='Create New Course' or normalize-space(text())='إنشاء دورة جديدة']");
-    By lectureScheduleLocator = By.xpath("//*[normalize-space(text())='Create New Course']");
-    By manageStudentsLocators = By.xpath("//*[normalize-space(text())='Manage Students']");
     By togglestatusLocator = By.xpath("//*[name()='svg' and contains(@class, 'ThemeToggle')]");
     By languageContentLocator = By.xpath("//span[@class='LanguageSwitcher-module__CeKvmG__languageText']");
     By notificationSectionLocator = By.xpath("//div[@class='NotificationDropdown-module__V6trHW__dropdown']");
@@ -39,13 +38,6 @@ public class TeacherDashBoardPage {
     By deleteButtonofTheAddedCourse = By.xpath("(//button[contains(@class,'deleteButton')])[16]");
 
 
-
-    String loginUrl = "https://edvance-ace.vercel.app/login";
-    String dashBoardUrl = "https://edvance-ace.vercel.app/teacher/dashboard";
-    String specilizationFieldValue = "Science";
-    String yearsOfExFieldValue = "10";
-    String valueToChoose = "الصف الأول الابتدائي";
-
     Bot dashBoardBot;
 
     public TeacherDashBoardPage(Bot bot) {
@@ -53,7 +45,7 @@ public class TeacherDashBoardPage {
     }
 
     public boolean verifyDashBoardPageLanding() {
-        return dashBoardBot.getURLWhenItChanges(loginUrl).contains("dashboard");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("login.url")).contains("dashboard");
     }
 
     public void clickOnStudentsField() {
@@ -61,7 +53,7 @@ public class TeacherDashBoardPage {
     }
 
     public boolean checkStudentsPageLanding() {
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("students");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("students");
     }
 
     public void clickOnSessionScheduleField() {
@@ -69,7 +61,7 @@ public class TeacherDashBoardPage {
     }
 
     public boolean checkSessionSchedulePageLanding() {
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("schedule");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("schedule");
     }
 
     public void clickOnStatisticsField() {
@@ -77,7 +69,7 @@ public class TeacherDashBoardPage {
     }
 
     public boolean checkStatisticsPageLanding() {
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("analytics");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("analytics");
     }
 
     public void themeToggleLClick() {
@@ -113,7 +105,7 @@ public class TeacherDashBoardPage {
     }
 
     public boolean checkProfilePageLanding() {
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("profile");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("profile");
     }
 
     public void clickOnEditProfileButton() {
@@ -122,11 +114,11 @@ public class TeacherDashBoardPage {
 
     public void enterInSpecializationField() {
         dashBoardBot.clickOn(specializationLocator);
-        dashBoardBot.typeInto(specializationLocator, specilizationFieldValue);
+        dashBoardBot.typeInto(specializationLocator,  ConfigReader.getProperty("teacher.specialization"));
     }
 
     public void enterInSpecializationyearsOfExField() {
-        dashBoardBot.typeInto(yearsOfExperienceLocator, yearsOfExFieldValue);
+        dashBoardBot.typeInto(yearsOfExperienceLocator, ConfigReader.getProperty("teacher.specialization"));
     }
 
     public void clickOnSaveChangesButton() {
@@ -154,7 +146,7 @@ public class TeacherDashBoardPage {
     }
 
     public boolean checkEarningsPageLanding() {
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("earnings");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("earnings");
     }
 
     public void clickOnLogoutButton() {
@@ -162,61 +154,73 @@ public class TeacherDashBoardPage {
     }
 
     public boolean checkLogoutSuccessfull() {
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("login");
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("login");
     }
 
     public void clickCreateNewCourse() {
         dashBoardBot.clickOn(createNewCourseLocator);
     }
 
-    public boolean checkCreateNewCoursePageLanding(){
-        return dashBoardBot.getURLWhenItChanges(dashBoardUrl).contains("create");
+    public boolean checkCreateNewCoursePageLanding() {
+        return dashBoardBot.getURLWhenItChanges(ConfigReader.getProperty("dashboard.url")).contains("create");
     }
-    public void enterCourseTittle(){
-        dashBoardBot.typeInto(courseTitleLocator,"Software Testing Course");
+
+    public void enterCourseTittle() {
+        dashBoardBot.typeInto(courseTitleLocator, ConfigReader.getProperty("course.title"));
     }
-    public void enterCourseDescription(){
-        dashBoardBot.typeInto(courseDescriptionLocator,"Apply now to get the full software testing course");
+
+    public void enterCourseDescription() {
+        dashBoardBot.typeInto(courseDescriptionLocator, ConfigReader.getProperty("course.description"));
     }
-    public void enterSubject(){
+
+    public void enterSubject() {
         dashBoardBot.clickOn(subjectLocator);
     }
-    public void chooseFromList(){
+
+    public void chooseFromList() {
         dashBoardBot.clickOn(selectLocator);
         dashBoardBot.clickOn(selectOptionLocator);
     }
-    public void clickNextButton(){
+
+    public void clickNextButton() {
         dashBoardBot.clickOn(nextButtonLocator);
     }
-    public void enterCoursePrice(){
-        dashBoardBot.typeInto(coursePriceLocator,"100");
+
+    public void enterCoursePrice() {
+        dashBoardBot.typeInto(coursePriceLocator, ConfigReader.getProperty("course.price"));
     }
-    public void enterCourseDuration(){
-        dashBoardBot.typeInto(courseDurationLocator,"10");
+
+    public void enterCourseDuration() {
+        dashBoardBot.typeInto(courseDurationLocator,ConfigReader.getProperty("course.duration"));
     }
-    public void enterCourseNumofLessons(){
-        dashBoardBot.typeInto(courseNumofLessons,"20");
+
+    public void enterCourseNumofLessons() {
+        dashBoardBot.typeInto(courseNumofLessons, ConfigReader.getProperty("course.lessons"));
     }
-    public void clickCreateCourseButton(){
+
+    public void clickCreateCourseButton() {
         dashBoardBot.clickOn(createCourseLocator);
     }
-    public boolean verifyCourseAdded(){
+
+    public boolean verifyCourseAdded() {
         return dashBoardBot.displayedText(courseNumbersinHome).contains("16");
     }
-    public void clickDeleteButtonofTheNewCourse(){
+
+    public void clickDeleteButtonofTheNewCourse() {
         dashBoardBot.clickOn(deleteButtonofTheAddedCourse);
     }
-    public void acceptDeletePopupMessage(){
+
+    public void acceptDeletePopupMessage() {
         dashBoardBot.popUpMessageOK();
     }
-    public void verifyPageRelod(){
-        dashBoardBot.clickOn(notificationLocator);}
-    public boolean verifytheCourseDeleted(){
-        return dashBoardBot.displayedText(courseNumbersinHome).contains("15");
+
+    public void verifyPageRelod() {
+        dashBoardBot.clickOn(notificationLocator);
     }
 
-
-
+    public boolean verifytheCourseDeleted() {
+        return dashBoardBot.displayedText(courseNumbersinHome).contains("15");
+    }
 
 
 }
