@@ -1,326 +1,297 @@
-name: Selenium Test Automation CI/CD Pipeline
+name: EdvancePlatform - Automation Tests
 
 on:
   push:
-    branches:
+    branches: 
       - main
       - develop
+    paths:
+      - 'EdvancePlatform/**'
+      - '.github/workflows/**'
+  
   pull_request:
-    branches:
+    branches: 
       - main
-  workflow_dispatch:
-  schedule:
-    - cron: '0 2 * * *' # Nightly at 2 AM
-
-env:
-  JAVA_VERSION: '21'
-  MAVEN_OPTS: -Xmx1024m
+      - develop
+    types: [opened, synchronize, reopened]
+  
+  workflow_dispatch:  # Allow manual trigger
+    inputs:
+      browser:
+        description: 'Browser to run tests'
+        required: true
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - edge
+      suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - full
+      environment:
+        description: 'Test environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
 
 jobs:
-  # Job 1: Compile the project
-  compile:
-    name: Compile Project
-    runs-on: windows-latest
-
+  test:
+    name: Run Tests on ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+        java-version: ['11']
+    
     steps:
-      - name: Checkout Repository
+      # ============================================
+      # Step 1: Checkout Repository
+      # ============================================
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        with:
+          fetch-depth: 0  # Full history for better reporting
+      
+      # ============================================
+      # Step 2: Setup Java Environment
+      # ============================================
+      - name: ☕ Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: temurin
-          cache: maven
-
-      - name: Cache Maven Dependencies
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: 'maven'
+      
+      # ============================================
+      # Step 3: Cache Maven Dependencies
+      # ============================================
+      - name: 📦 Cache Maven packages
         uses: actions/cache@v3
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Compile with Maven
-        run: mvn clean compile
-
-  # Job 2: Security Scanning
-  security-check:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    needs: compile
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: fs
-          scan-ref: '.'
-          format: sarif
-          output: trivy-results.sarif
-
-      - name: Upload Trivy Results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
-        with:
-          sarif_file: trivy-results.sarif
-
-      - name: Run Gitleaks Secret Scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # Job 3: SonarQube Code Quality
-  sonarqube-analysis:
-    name: SonarQube Code Quality
-    runs-on: ubuntu-latest
-    needs: security-check
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: temurin
-          cache: maven
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
-
-      - name: SonarQube Quality Gate Check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        with:
-          pollingTimeoutSec: 300
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
-
-  # Job 4: Smoke Tests
-  smoke-tests:
-    name: Smoke Tests
-    runs-on: ubuntu-latest
-    needs: compile
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: temurin
-          cache: maven
-
-      - name: Setup Chrome Browser
-        uses: browser-actions/setup-chrome@v1
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      
+      # ============================================
+      # Step 4: Install Browser Dependencies
+      # ============================================
+      - name: 🌐 Install Chrome
+        if: matrix.browser == 'chrome'
+        uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
-
-      - name: Setup ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
-      - name: Verify Chrome Installation
+      
+      - name: 🦊 Install Firefox
+        if: matrix.browser == 'firefox'
+        uses: browser-actions/setup-firefox@latest
+        with:
+          firefox-version: latest
+      
+      # ============================================
+      # Step 5: Display Environment Info
+      # ============================================
+      - name: 🔍 Display environment information
         run: |
-          google-chrome --version || true
-          chromedriver --version || true
-
-      - name: Run Smoke Tests
-        run: mvn test -DsuiteXmlFile=testng-smoke.xml
+          echo "========================================"
+          echo "Environment Information"
+          echo "========================================"
+          echo "OS: ${{ runner.os }}"
+          echo "Java Version: ${{ matrix.java-version }}"
+          echo "Browser: ${{ matrix.browser }}"
+          echo "Maven Version: $(mvn -v)"
+          echo "Chrome Version: $(google-chrome --version || echo 'Not installed')"
+          echo "Firefox Version: $(firefox --version || echo 'Not installed')"
+          echo "========================================"
+      
+      # ============================================
+      # Step 6: Compile Project
+      # ============================================
+      - name: 🔨 Compile project
+        run: |
+          cd EdvancePlatform
+          mvn clean compile
+      
+      # ============================================
+      # Step 7: Run Tests
+      # ============================================
+      - name: 🧪 Run Automation Tests
+        id: test-execution
         continue-on-error: true
-
-      - name: Upload Smoke Test Results
+        run: |
+          cd EdvancePlatform
+          mvn clean test \
+            -Dbrowser=${{ matrix.browser }} \
+            -Dheadless=true \
+            -Denvironment=staging \
+            -DsuiteXmlFile=testng.xml
+        env:
+          SELENIUM_BROWSER: ${{ matrix.browser }}
+          TEST_ENV: staging
+      
+      # ============================================
+      # Step 8: Generate Test Report
+      # ============================================
+      - name: 📊 Generate Surefire Report
+        if: always()
+        run: |
+          cd EdvancePlatform
+          mvn surefire-report:report-only
+      
+      # ============================================
+      # Step 9: Upload Test Results
+      # ============================================
+      - name: 📤 Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-test-results
+          name: test-results-${{ matrix.browser }}-${{ github.run_number }}
           path: |
-            target/surefire-reports/
-            target/site/
-          retention-days: 7
-
-  # Job 5: Regression Tests
-  regression-tests:
-    name: Regression Tests
-    runs-on: ubuntu-latest
-    needs: smoke-tests
-    if: github.event_name == 'push' || github.event_name == 'schedule'
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: temurin
-          cache: maven
-
-      - name: Setup Chrome Browser
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-
-      - name: Setup ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
-      - name: Run Regression Tests
-        run: mvn test -DsuiteXmlFile=testng-regression.xml
-        continue-on-error: true
-
-      - name: Generate Test Report
-        if: always()
-        run: mvn surefire-report:report-only
-
-      - name: Upload Regression Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: regression-test-results
-          path: |
-            target/surefire-reports/
-            target/site/
+            EdvancePlatform/target/surefire-reports/
+            EdvancePlatform/test-output/
+            EdvancePlatform/target/site/
           retention-days: 30
-
-      - name: Upload Screenshots on Failure
+      
+      # ============================================
+      # Step 10: Upload Screenshots on Failure
+      # ============================================
+      - name: 📸 Upload Screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: test-failure-screenshots
-          path: screenshots/
-          retention-days: 7
-
-      - name: Publish Test Report
+          name: screenshots-${{ matrix.browser }}-${{ github.run_number }}
+          path: EdvancePlatform/test-output/screenshots/
+          retention-days: 30
+      
+      # ============================================
+      # Step 11: Publish Test Results
+      # ============================================
+      - name: 📋 Publish Test Report
         if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: Regression Test Results
-          path: target/surefire-reports/*.xml
+          name: Test Results - ${{ matrix.browser }}
+          path: EdvancePlatform/target/surefire-reports/*.xml
           reporter: java-junit
           fail-on-error: false
-
-  # Job 6: Build and Package
-  build-package:
-    name: Build and Package
-    runs-on: ubuntu-latest
-    needs:
-      - smoke-tests
-      - sonarqube-analysis
-    if: needs.smoke-tests.result == 'success'
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
+      
+      # ============================================
+      # Step 12: Upload to Codecov (Optional)
+      # ============================================
+      - name: 📈 Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v3
         with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: temurin
-          cache: maven
-
-      - name: Build Project
-        run: mvn clean package -DskipTests
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-automation-package
-          path: target/*.jar
-          retention-days: 30
-
-  # Job 7: Test Results Summary and Notifications
+          files: EdvancePlatform/target/site/jacoco/jacoco.xml
+          flags: unittests
+          name: codecov-${{ matrix.browser }}
+          fail_ci_if_error: false
+  
+  # ============================================
+  # Summary Job
+  # ============================================
   test-summary:
-    name: Test Results Summary
+    name: Test Summary
+    needs: test
     runs-on: ubuntu-latest
-    needs:
-      - smoke-tests
-      - regression-tests
     if: always()
-
+    
     steps:
-      - name: Download Smoke Test Results
-        if: needs.smoke-tests.result != 'skipped'
-        uses: actions/download-artifact@v4
-        with:
-          name: smoke-test-results
-          path: smoke-results
-
-      - name: Download Regression Test Results
-        if: needs.regression-tests.result != 'skipped'
-        uses: actions/download-artifact@v4
-        with:
-          name: regression-test-results
-          path: regression-results
-        continue-on-error: true
-
-      - name: Generate Test Summary
+      - name: 📊 Generate Summary
         run: |
-          echo "## 🧪 Test Automation Results" >> $GITHUB_STEP_SUMMARY
+          echo "### 🧪 Test Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Smoke Tests: ${{ needs.smoke-tests.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "### Regression Tests: ${{ needs.regression-tests.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Repository:** ${{ github.repository }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow:** ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[View Full Report](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "Check the test results in the artifacts section above." >> $GITHUB_STEP_SUMMARY
+      
+      - name: ✅ All tests passed
+        if: ${{ needs.test.result == 'success' }}
+        run: |
+          echo "✅ All tests passed successfully!" >> $GITHUB_STEP_SUMMARY
+      
+      - name: ❌ Some tests failed
+        if: ${{ needs.test.result == 'failure' }}
+        run: |
+          echo "❌ Some tests failed. Check the test reports for details." >> $GITHUB_STEP_SUMMARY
+          exit 1
 
-      - name: Comment PR with Test Results
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const smokeResult = '${{ needs.smoke-tests.result }}';
-            const regressionResult = '${{ needs.regression-tests.result }}';
-
-            const icon = smokeResult === 'success' ? '✅' : '❌';
-
-            const comment = `## ${icon} Test Automation Results
-
-            | Test Suite | Status |
-            |------------|--------|
-            | Smoke Tests | ${smokeResult} |
-            | Regression Tests | ${regressionResult} |
-
-            **Details:** [View Full Report](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            `;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
-
-  # Job 8: Send Email Notifications (Optional)
+  # ============================================
+  # Notification Job
+  # ============================================
   notify:
     name: Send Notifications
+    needs: [test, test-summary]
     runs-on: ubuntu-latest
-    needs:
-      - smoke-tests
-      - regression-tests
     if: always()
-
+    
     steps:
-      - name: Send Failure Notification
-        run: |
-          echo "❌ Tests Failed!"
-          echo "Smoke Tests: ${{ needs.smoke-tests.result }}"
-          echo "Regression Tests: ${{ needs.regression-tests.result }}"
-          echo "Please check the Actions tab for details"
+      - name: 📧 Send Slack Notification
+        if: ${{ secrets.SLACK_WEBHOOK_URL }}
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "EdvancePlatform Test Results",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "🧪 EdvancePlatform - Test Results"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Status:*\n${{ needs.test.result == 'success' && '✅ Passed' || '❌ Failed' }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch:*\n${{ github.ref_name }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Triggered by:*\n${{ github.actor }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Workflow:*\n${{ github.workflow }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Results"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
