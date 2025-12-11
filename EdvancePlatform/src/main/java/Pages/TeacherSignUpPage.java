@@ -16,14 +16,6 @@ public class TeacherSignUpPage {
     By verifyButtonLocator = By.xpath("//button[@class='Signup-module__5az0ga__verifyButton']");
 
 
-    String signUpURL = ConfigReader.getProperty("signUpURL");
-    String firstNAme = ConfigReader.getProperty("firstNAme");
-    String lastName = ConfigReader.getProperty("lastName");
-    String email = ConfigReader.getProperty("email");
-    String phoneNumber = ConfigReader.getProperty("phoneNumber");
-    String password = ConfigReader.getProperty("password");
-    String confirmPassword = ConfigReader.getProperty("confirmPassword");
-
     Bot signUpBot;
 
     public TeacherSignUpPage(Bot bot) {
@@ -31,7 +23,7 @@ public class TeacherSignUpPage {
     }
 
     public void navigateToSignUpPage() {
-        signUpBot.navigateTo(signUpURL);
+        signUpBot.navigateTo(ConfigReader.getProperty("signUpURL"));
     }
 
     public void selectInstructorField() {
@@ -39,27 +31,27 @@ public class TeacherSignUpPage {
     }
 
     public void enterFirstName() {
-        signUpBot.typeInto(firstNameLocator, firstNAme);
+        signUpBot.typeInto(firstNameLocator, ConfigReader.getProperty("teacher.properties","firstNAme"));
     }
 
     public void enterLastName() {
-        signUpBot.typeInto(lastNameLocator, lastName);
+        signUpBot.typeInto(lastNameLocator, ConfigReader.getProperty("teacher.properties","lastName"));
     }
 
     public void enterEmail() {
-        signUpBot.typeInto(emailLocator, email);
+        signUpBot.typeInto(emailLocator,  ConfigReader.getProperty("teacher.properties","email"));
     }
 
     public void enterPhone() {
-        signUpBot.typeInto(phoneLocator, phoneNumber);
+        signUpBot.typeInto(phoneLocator, ConfigReader.getProperty("teacher.properties","phoneNumber"));
     }
 
     public void enterPassword() {
-        signUpBot.typeInto(passwordLocator, password);
+        signUpBot.typeInto(passwordLocator, ConfigReader.getProperty("teacher.properties","password"));
     }
 
     public void enterConfirmPassword() {
-        signUpBot.typeInto(confirmPasswordLocator, confirmPassword);
+        signUpBot.typeInto(confirmPasswordLocator, ConfigReader.getProperty("teacher.properties","confirmPassword"));
     }
 
     public void nextButtonClick() {
@@ -71,7 +63,7 @@ public class TeacherSignUpPage {
     }
 
     public boolean signUpPageLanding() {
-        return signUpBot.getURLWhenItChanges(signUpURL).contains("verify.didit.me");
+        return signUpBot.getURLWhenItChanges(ConfigReader.getProperty("signUpURL")).contains("verify.didit.me");
 
     }
 

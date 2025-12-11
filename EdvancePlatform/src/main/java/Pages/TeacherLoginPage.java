@@ -44,8 +44,8 @@ public class TeacherLoginPage {
     //General valid navigate and login method to use in the rest of the teacher pages
     public void navigateandValidLogin() {
         loginBot.navigateTo(ConfigReader.getProperty("login.url"));
-        loginBot.typeInto(loginEmailLocator, ConfigReader.getProperty("teacher1Email"));
-        loginBot.typeInto(loginPasswordLocator, ConfigReader.getProperty("teacher.validPassword"));
+        loginBot.typeInto(loginEmailLocator, ConfigReader.getProperty("teacher.properties","teacher1Email"));
+        loginBot.typeInto(loginPasswordLocator, ConfigReader.getProperty("teacher.properties","teacher.validPassword"));
         loginBot.clickOn(loginButtonLocator);
     }
 

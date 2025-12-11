@@ -114,11 +114,11 @@ public class TeacherDashBoardPage {
 
     public void enterInSpecializationField() {
         dashBoardBot.clickOn(specializationLocator);
-        dashBoardBot.typeInto(specializationLocator, ConfigReader.getProperty("teacher.specialization"));
+        dashBoardBot.typeInto(specializationLocator, ConfigReader.getProperty("teacher.properties","teacher.specialization"));
     }
 
     public void enterInSpecializationyearsOfExField() {
-        dashBoardBot.typeInto(yearsOfExperienceLocator, ConfigReader.getProperty("teacher.specialization"));
+        dashBoardBot.typeInto(yearsOfExperienceLocator, ConfigReader.getProperty("teacher.properties","teacher.specialization"));
     }
 
     public void clickOnSaveChangesButton() {
@@ -166,11 +166,11 @@ public class TeacherDashBoardPage {
     }
 
     public void enterCourseTittle() {
-        dashBoardBot.typeInto(courseTitleLocator, ConfigReader.getProperty("course.title"));
+        dashBoardBot.typeInto(courseTitleLocator, ConfigReader.getProperty("teacher.properties","course.title"));
     }
 
     public void enterCourseDescription() {
-        dashBoardBot.typeInto(courseDescriptionLocator, ConfigReader.getProperty("course.description"));
+        dashBoardBot.typeInto(courseDescriptionLocator, ConfigReader.getProperty("teacher.properties","course.description"));
     }
 
     public void enterSubject() {
@@ -187,15 +187,15 @@ public class TeacherDashBoardPage {
     }
 
     public void enterCoursePrice() {
-        dashBoardBot.typeInto(coursePriceLocator, ConfigReader.getProperty("course.price"));
+        dashBoardBot.typeInto(coursePriceLocator, ConfigReader.getProperty("teacher.properties","course.price"));
     }
 
     public void enterCourseDuration() {
-        dashBoardBot.typeInto(courseDurationLocator, ConfigReader.getProperty("course.duration"));
+        dashBoardBot.typeInto(courseDurationLocator, ConfigReader.getProperty("teacher.properties","course.duration"));
     }
 
     public void enterCourseNumofLessons() {
-        dashBoardBot.typeInto(courseNumofLessons, ConfigReader.getProperty("course.lessons"));
+        dashBoardBot.typeInto(courseNumofLessons, ConfigReader.getProperty("teacher.properties","course.lessons"));
     }
 
     public void clickCreateCourseButton() {
