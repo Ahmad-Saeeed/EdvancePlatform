@@ -107,4 +107,12 @@ expectedUrl = uspBot.currentURL();
             actualCourseNumber = uspBot.displayedText(CoursesNumberUsp);
         }
     }
+
+    public void UniversityStudentLoginUsingExcelData(String username, String password) {
+        uspBot = new Bot();
+        uspBot.navigateTo(urlMain);
+        uspBot.typeInto(loginEmail, username);
+        uspBot.typeInto(loginPassword, password);
+        uspBot.clickOn(loginSubmit);
+    }
 }
