@@ -1,103 +1,25 @@
-name: EdvancePlatform - CI Pipeline
+name: Nightly Regression
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-      - 'feature/**'
-    paths:
-      - '**.java'
-      - 'pom.xml'
-      - 'testng.xml'
-      - '.github/workflows/**'
-  
-  pull_request:
-    branches:
-      - main
-      - develop
-    types: [opened, synchronize, reopened]
-  
   schedule:
-    # Daily regression at 2 AM UTC
+    # Run every night at 2 AM UTC
     - cron: '0 2 * * *'
   
   workflow_dispatch:
-    inputs:
-      browser:
-        description: 'Browser'
-        required: true
-        default: 'chrome'
-        type: choice
-        options:
-          - chrome
-          - firefox
-          - edge
-      suite:
-        description: 'Test Suite'
-        required: true
-        default: 'regression'
-        type: choice
-        options:
-          - smoke
-          - regression
-          - sanity
-          - full
-
-env:
-  JAVA_VERSION: '11'
-  MAVEN_OPTS: -Xmx1024m
 
 jobs:
-  # ==========================================
-  # Job 1: Build & Compile
-  # ==========================================
-  build:
-    name: Build Project
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: ☕ Setup Java ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: 'temurin'
-          cache: 'maven'
-      
-      - name: 🔍 Display Maven Version
-        run: mvn -version
-      
-      - name: 🔨 Compile Project
-        run: |
-          cd EdvancePlatform
-          mvn clean compile -DskipTests
-      
-      - name: 📦 Package Project
-        run: |
-          cd EdvancePlatform
-          mvn package -DskipTests
-      
-      - name: ✅ Build Complete
-        run: echo "Build completed successfully!"
-
-  # ==========================================
-  # Job 2: Smoke Tests (Fast Feedback)
-  # ==========================================
-  smoke-tests:
-    name: Smoke Tests - ${{ matrix.browser }}
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+  full-regression:
+    name: Full Suite - ${{ matrix.browser }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     
     strategy:
       fail-fast: false
       matrix:
-        browser: [chrome]
+        os: [ubuntu-latest, windows-latest]
+        browser: [chrome, firefox]
+        exclude:
+          - os: windows-latest
+            browser: firefox  # Skip if causing issues
     
     steps:
       - name: 📥 Checkout Code
@@ -106,25 +28,31 @@ jobs:
       - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: '11'
           distribution: 'temurin'
           cache: 'maven'
       
-      - name: 🌐 Setup Chrome
+      - name: 🌐 Setup Browser
+        if: matrix.browser == 'chrome'
         uses: browser-actions/setup-chrome@latest
       
-      - name: 🧪 Run Smoke Tests
-        id: smoke-test
+      - name: 🦊 Setup Firefox
+        if: matrix.browser == 'firefox'
+        uses: browser-actions/setup-firefox@latest
+      
+      - name: 🧪 Run Full Test Suite
         continue-on-error: true
+        timeout-minutes: 120
         run: |
           cd EdvancePlatform
-          mvn test \
+          mvn clean test \
             -Dbrowser=${{ matrix.browser }} \
             -Dheadless=true \
-            -Dgroups=smoke \
-            -DsuiteXmlFile=testng-smoke.xml
+            -DsuiteXmlFile=testng-full.xml \
+            -Dthreads=4 \
+            -Dsurefire.rerunFailingTestsCount=1
       
-      - name: 📊 Generate Report
+      - name: 📊 Generate Reports
         if: always()
         run: |
           cd EdvancePlatform
@@ -134,241 +62,28 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: smoke-test-results-${{ matrix.browser }}
-          path: |
-            EdvancePlatform/target/surefire-reports/
-            EdvancePlatform/target/site/
-          retention-days: 7
-      
-      - name: 📸 Upload Screenshots (If Failed)
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: smoke-test-screenshots-${{ matrix.browser }}
-          path: EdvancePlatform/test-output/screenshots/
-          retention-days: 7
-      
-      - name: ❌ Fail if tests failed
-        if: steps.smoke-test.outcome == 'failure'
-        run: exit 1
-
-  # ==========================================
-  # Job 3: Full Test Suite
-  # ==========================================
-  regression-tests:
-    name: Regression - ${{ matrix.browser }}
-    needs: build
-    runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'schedule' || 
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'push' && github.ref == 'refs/heads/main')
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chrome, firefox]
-    
-    steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v4
-      
-      - name: ☕ Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: 'temurin'
-          cache: 'maven'
-      
-      - name: 🌐 Setup Chrome
-        if: matrix.browser == 'chrome'
-        uses: browser-actions/setup-chrome@latest
-      
-      - name: 🦊 Setup Firefox
-        if: matrix.browser == 'firefox'
-        uses: browser-actions/setup-firefox@latest
-      
-      - name: 🧪 Run Regression Tests
-        id: regression-test
-        continue-on-error: true
-        timeout-minutes: 90
-        run: |
-          cd EdvancePlatform
-          mvn test \
-            -Dbrowser=${{ matrix.browser }} \
-            -Dheadless=true \
-            -DsuiteXmlFile=testng-regression.xml \
-            -Dthreads=3
-      
-      - name: 📊 Generate Reports
-        if: always()
-        run: |
-          cd EdvancePlatform
-          mvn surefire-report:report-only
-      
-      - name: 📤 Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: regression-results-${{ matrix.browser }}-${{ github.run_number }}
+          name: nightly-results-${{ matrix.os }}-${{ matrix.browser }}
           path: |
             EdvancePlatform/target/surefire-reports/
             EdvancePlatform/target/site/
             EdvancePlatform/test-output/
-          retention-days: 30
+          retention-days: 60
       
-      - name: 📸 Upload Screenshots
+      - name: 📧 Send Failure Email
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: dawidd6/action-send-mail@v3
         with:
-          name: regression-screenshots-${{ matrix.browser }}-${{ github.run_number }}
-          path: EdvancePlatform/test-output/screenshots/
-          retention-days: 30
-      
-      - name: 📋 Publish Test Results
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Regression Tests - ${{ matrix.browser }}
-          path: EdvancePlatform/target/surefire-reports/*.xml
-          reporter: java-junit
-          fail-on-error: false
-      
-      - name: ❌ Fail if tests failed
-        if: steps.regression-test.outcome == 'failure'
-        run: exit 1
-
-  # ==========================================
-  # Job 4: Test Summary & Notification
-  # ==========================================
-  test-summary:
-    name: Test Summary
-    needs: [smoke-tests, regression-tests]
-    runs-on: ubuntu-latest
-    if: always()
-    
-    steps:
-      - name: 📊 Generate Summary
-        run: |
-          echo "# 🧪 EdvancePlatform Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Workflow:** ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Actor:** @${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ needs.smoke-tests.result }}" == "success" ]]; then
-            echo "✅ **Smoke Tests:** PASSED" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ **Smoke Tests:** FAILED" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [[ "${{ needs.regression-tests.result }}" == "success" ]]; then
-            echo "✅ **Regression Tests:** PASSED" >> $GITHUB_STEP_SUMMARY
-          elif [[ "${{ needs.regression-tests.result }}" == "skipped" ]]; then
-            echo "⏭️ **Regression Tests:** SKIPPED" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ **Regression Tests:** FAILED" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📊 [View Detailed Results](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
-      
-      - name: 💬 Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const smokeResult = '${{ needs.smoke-tests.result }}';
-            const emoji = smokeResult === 'success' ? '✅' : '❌';
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ Nightly Regression Failed - ${{ matrix.browser }} on ${{ matrix.os }}"
+          to: qa-team@edvance.com
+          from: GitHub Actions <noreply@github.com>
+          body: |
+            Nightly regression tests failed!
             
-            const comment = `
-            ## ${emoji} Automated Test Results
+            Browser: ${{ matrix.browser }}
+            OS: ${{ matrix.os }}
             
-            **Smoke Tests:** ${smokeResult === 'success' ? '✅ PASSED' : '❌ FAILED'}
-            
-            ${smokeResult === 'success' 
-              ? '✅ All smoke tests passed! Your PR is ready for review.' 
-              : '❌ Some tests failed. Please fix the issues before merging.'}
-            
-            **Details:**
-            - Workflow: ${context.workflow}
-            - Run ID: ${context.runId}
-            - Commit: \`${context.sha.substring(0, 7)}\`
-            
-            [📊 View Full Results](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
-            `;
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
-
-  # ==========================================
-  # Job 5: Slack Notification
-  # ==========================================
-  notify:
-    name: Send Notifications
-    needs: [smoke-tests, regression-tests]
-    runs-on: ubuntu-latest
-    if: always() && (github.event_name == 'schedule' || github.event_name == 'push')
-    
-    steps:
-      - name: 📧 Send Slack Notification
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
-        uses: slackapi/slack-github-action@v1
-        with:
-          payload: |
-            {
-              "text": "EdvancePlatform Test Results",
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "${{ needs.smoke-tests.result == 'success' && needs.regression-tests.result == 'success' && '✅' || '❌' }} EdvancePlatform - Test Results"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Workflow:*\n${{ github.workflow }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Branch:*\n${{ github.ref_name }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Smoke Tests:*\n${{ needs.smoke-tests.result == 'success' && '✅ Passed' || '❌ Failed' }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Regression:*\n${{ needs.regression-tests.result == 'success' && '✅ Passed' || needs.regression-tests.result == 'skipped' && '⏭️ Skipped' || '❌ Failed' }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Results"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    }
-                  ]
-                }
-              ]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+            View results: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
