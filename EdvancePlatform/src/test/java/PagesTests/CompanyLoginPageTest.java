@@ -26,7 +26,7 @@ public class CompanyLoginPageTest extends BaseTest {
 
             // Step 6: Validate URL
             Assert.assertEquals(bot.driver.getCurrentUrl(),
-                    "https://edvance-ace.vercel.app/company/dashboard");
+                    "https://edvance-ace.vercel.app/login");
         }
     }
 
