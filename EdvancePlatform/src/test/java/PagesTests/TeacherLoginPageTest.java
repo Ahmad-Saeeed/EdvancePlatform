@@ -17,6 +17,7 @@ public class TeacherLoginPageTest extends BaseTest {
 
     }
 
+
     @Test
     public void successfullLoginTestTeacher1() {
         loginPage.navigateToLoginPage();
