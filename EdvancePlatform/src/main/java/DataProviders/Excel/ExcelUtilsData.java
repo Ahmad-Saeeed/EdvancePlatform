@@ -7,8 +7,6 @@ import java.io.IOException;
 
     public class ExcelUtilsData {
 
-//        public static int sheetIndex;
-
         public static Object[][] getTestData(String filePath, String sheetName) {
 
             Object[][] data = null;

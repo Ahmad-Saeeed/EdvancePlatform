@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 
 public class UniversityStudentProfileTest extends CrossBrowserBaseTest {
     UniversityStudentProfilePage universityStudentProfilePage = new UniversityStudentProfilePage();
-    private static int sheetIndex = 0;
 
     @Test
     public void AllStudentsNavigateTest(){
@@ -32,9 +31,6 @@ public class UniversityStudentProfileTest extends CrossBrowserBaseTest {
 
     @Test (dataProvider = "credentialsData",dataProviderClass = ExcelDataProvider.class)
     public void TestLoginUsingExcelSheet(String username, String password) throws Exception{
-//        int sheetNumber =1;
-//        ExcelDataProvider.getExcelData(sheetNumber);
-       // sheetIndex = 4;
         universityStudentProfilePage.UniversityStudentLoginUsingExcelData(username, password);
     }
 
