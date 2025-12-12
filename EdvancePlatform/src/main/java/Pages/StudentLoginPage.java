@@ -67,11 +67,14 @@ public class StudentLoginPage {
     }
 
     public boolean errorMsgDisplayed() {
-        return loginBot.displayedText(errorMsgLocator).contains("فشل");
+        return loginBot.displayedText(errorMsgLocator).contains("فشل")|| (loginBot.displayedText(errorMsgLocator).contains("failed"));
+    }
+    public boolean invalidEmailErrorMsgDisplayed() {
+        return loginBot.displayedText(errorMsgLocator).contains("Invalid email ");
     }
 
     public boolean passwordFieldErrorMsgDisplayed() {
-        return loginBot.displayedText(passwordFieldErrorMsgLocator).contains("يجب أن تكون 8 أحرف على الأقل");
+        return loginBot.displayedText(passwordFieldErrorMsgLocator).contains("يجب أن تكون 8 أحرف على الأقل")|| (loginBot.displayedText(passwordFieldErrorMsgLocator).contains("at least 8"));
     }
 
     public void clickOnForgerPassword() {

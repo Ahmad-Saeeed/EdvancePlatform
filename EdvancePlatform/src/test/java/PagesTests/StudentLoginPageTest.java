@@ -184,9 +184,9 @@ public class StudentLoginPageTest extends BaseTest
                 Assert.assertTrue(loginPage.errorMsgDisplayed());
                 break;
 
-            /*case "Invalid email format":
-               // Assert.assertTrue(loginPage.welcomeMessageDisplayed());
-                break;*/
+            case "Invalid email format":
+                Assert.assertTrue(loginPage.invalidEmailErrorMsgDisplayed());
+                break;
 
             case "Invalid password format":
                 Assert.assertTrue(loginPage.passwordFieldErrorMsgDisplayed());
@@ -202,9 +202,9 @@ public class StudentLoginPageTest extends BaseTest
                 {"student1@test.com","password123","Successful Login"},
                 {"student2@test.com","password123","Successful Login"},
                 {"student3@test.com","password123","Successful Login"},
-                {"TestName@fake.com","password123","Invalid email account with correct password"},
+               {"kk@jake.com","password123","Invalid email account with correct password"},
                 {"student1@test.com","12345678","Invalid password with correct email account"},
-               // {"emailAccount","password123","Invalid email format"},
+               {"tester@xyz","password123","Invalid email format"},
                 {"student1@test.com","1234567","Invalid password format"}
 
         };

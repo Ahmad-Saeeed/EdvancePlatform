@@ -29,6 +29,7 @@ public class BrowserActions {
 
    public static Alert switchToAlert()
    {
+       LoggerFactory.logInfo("Moving to the poppedUp Alert");
        return browserActionDriver.switchTo().alert();
    }
 

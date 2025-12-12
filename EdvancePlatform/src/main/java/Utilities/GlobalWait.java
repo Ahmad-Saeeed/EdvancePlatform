@@ -84,12 +84,6 @@ public class GlobalWait
 
 
 
-
-
-
-
-
-
     public WebElement waitUntilTextDisplayed(By elementToGetItsText)
     {
         return waitType().until(d->{
