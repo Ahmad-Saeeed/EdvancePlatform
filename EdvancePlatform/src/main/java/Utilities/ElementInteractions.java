@@ -12,7 +12,7 @@ public class ElementInteractions {
     // to be the used one in the class.
     public ElementInteractions(WebDriver driver)
     {
-        waitDriver= driver;
+       Utilities.GlobalWait wait = new GlobalWait(driver);
     }
 
     public static void clickON(By elementToClickOnLocator)

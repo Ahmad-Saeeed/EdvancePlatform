@@ -69,7 +69,7 @@ public class UniversityStudentProfilePage {
 
     public void UniversityStudentProfileNavigation(int neededUsers) {
         for (int userIndex = 0; userIndex < neededUsers; userIndex++) {
-            uspBot = new Bot();
+            uspBot = new Bot("chrome");
             String email = emails[userIndex];
             uspBot.navigateTo(urlMain);
             uspBot.typeInto(loginEmail, email);
@@ -109,7 +109,7 @@ expectedUrl = uspBot.currentURL();
     }
 
     public void UniversityStudentLoginUsingExcelData(String username, String password) {
-        uspBot = new Bot();
+        uspBot = new Bot("chrome");
         uspBot.navigateTo(urlMain);
         uspBot.typeInto(loginEmail, username);
         uspBot.typeInto(loginPassword, password);

@@ -9,8 +9,15 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
+
+import java.time.Duration;
 
 import static Utilities.BrowserActions.*;
 import static Utilities.ElementInteractions.*;
@@ -21,7 +28,7 @@ public class Bot {
     ChromeOptions options;
     public WebDriver driver;
 
-    public Bot() {
+  /*  public Bot() {
 
         options = new ChromeOptions().addArguments("--start-maximized").addArguments("--incognito");
 
@@ -33,11 +40,46 @@ public class Bot {
         new ElementInteractions(driver);
 
        // wait = waitType();
-    /* new FluentWait<>(driver)
+    *//* new FluentWait<>(driver)
                 .withTimeout(Duration.ofSeconds(5))
                 .pollingEvery(Duration.ofMillis(300))
                 .ignoring(NoSuchElementException.class)
-                .ignoring(ElementNotInteractableException.class);*/
+                .ignoring(ElementNotInteractableException.class);*//*
+    }*/
+
+    public WebDriver setUpBrowserOptions(String targetBrowserName)
+    {
+        switch (targetBrowserName.toLowerCase())
+        {
+            case "firefox":
+                FirefoxOptions fOptions= new FirefoxOptions();
+                fOptions.addArguments("-private");
+                System.setProperty("webdriver.gecko.driver", "D:\\DEPI\\firefox\\geckodriver-v0.36.0-win32\\geckodriver.exe");
+                FirefoxDriver fDriver=new FirefoxDriver(fOptions);
+                fDriver.manage().window().maximize();
+                return fDriver;
+
+            case "edge" :
+                EdgeOptions eOptions= new EdgeOptions();
+                eOptions.addArguments("--start-maximized");
+                eOptions.addArguments("--inprivate");
+                EdgeDriver eDriver=new EdgeDriver(eOptions);
+                return eDriver;
+
+            default:
+                ChromeOptions cOptions=new ChromeOptions();
+                cOptions.addArguments("--start-maximized").addArguments("--incognito");
+                ChromeDriver cDriver = new ChromeDriver(cOptions);
+                return cDriver;
+
+        }
+    }
+
+    public Bot(String targetBrowserName) {
+
+        this.driver=setUpBrowserOptions(targetBrowserName);
+        new BrowserActions(driver);
+        new ElementInteractions(driver);
     }
 
     public void navigateTo(String URL) {
