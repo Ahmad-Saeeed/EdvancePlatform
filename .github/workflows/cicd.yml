@@ -1,4 +1,4 @@
-name: CI - Build & Test for EdvancePlatform
+name: CI - Build & Test for AdvancePlatform (Windows)
 
 on:
   push:
@@ -12,22 +12,11 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome:latest
-        ports:
-          - 4444:4444
-        options: >-
-          --shm-size="2g"
-          --health-cmd="curl -s http://localhost:4444/wd/hub/status | jq -e '.value.ready' || exit 1"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=12
+    runs-on: windows-latest
 
     env:
-      SELENIUM_REMOTE_URL: http://localhost:4444/wd/hub
+      CHROME_DRIVER_PATH: ${{ github.workspace }}\chromedriver-win64\chromedriver.exe
+      SELENIUM_BROWSER: chrome
 
     steps:
       - name: Checkout repository
@@ -43,30 +32,78 @@ jobs:
       - name: Cache Maven local repo
         uses: actions/cache@v4
         with:
-          path: ~/.m2/repository
+          path: ~\.m2\repository
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-m2-
 
+      - name: Install Chrome browser
+        run: |
+          choco install googlechrome -y
+        shell: powershell
+
+      - name: Download ChromeDriver
+        run: |
+          $chromeVersion = (Get-Item "C:\Program Files\Google\Chrome\Application\chrome.exe").VersionInfo.ProductVersion
+          $majorVersion = $chromeVersion.Split('.')[0]
+          Write-Host "Chrome version: $chromeVersion"
+          Write-Host "Major version: $majorVersion"
+          
+          # Download ChromeDriver for the matching Chrome version
+          $url = "https://storage.googleapis.com/chrome-for-testing-public/$chromeVersion/win64/chromedriver-win64.zip"
+          
+          try {
+            Invoke-WebRequest -Uri $url -OutFile chromedriver.zip
+          } catch {
+            # If exact version not found, try with major version
+            Write-Host "Exact version not found, trying with major version..."
+            $latestUrl = "https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json"
+            $json = Invoke-RestMethod -Uri $latestUrl
+            $driverUrl = $json.milestones.$majorVersion.downloads.chromedriver | Where-Object { $_.platform -eq "win64" } | Select-Object -First 1 -ExpandProperty url
+            Invoke-WebRequest -Uri $driverUrl -OutFile chromedriver.zip
+          }
+          
+          Expand-Archive -Path chromedriver.zip -DestinationPath . -Force
+          Write-Host "ChromeDriver downloaded and extracted"
+        shell: powershell
+
+      - name: Verify ChromeDriver
+        run: |
+          $env:PATH += ";${{ github.workspace }}\chromedriver-win64"
+          & "${{ github.workspace }}\chromedriver-win64\chromedriver.exe" --version
+        shell: powershell
+
       - name: Build without tests
         run: mvn -B -DskipTests package
+        shell: cmd
 
       - name: Run TestNG tests
         run: mvn -B test
+        shell: cmd
+        env:
+          webdriver.chrome.driver: ${{ github.workspace }}\chromedriver-win64\chromedriver.exe
 
       - name: Upload test results (Surefire)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
-          path: target/surefire-reports/
+          path: target\surefire-reports\
 
       - name: Generate JaCoCo coverage report
         run: mvn -B jacoco:report
+        shell: cmd
 
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
-          path: target/site/jacoco/
+          path: target\site\jacoco\
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: screenshots\
