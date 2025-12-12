@@ -146,11 +146,11 @@ public class Bot {
     /*====================================================================================================*/
 
     public String displayedText(By displayedTextLocator) {
-        return waitType().until(f ->
-        {
-            return f.findElement(displayedTextLocator).getText();
-        });
-        //return ElementInteractions.displayedTextOf(displayedTextLocator);
+//        return waitType().until(f ->
+//        {
+//            return f.findElement(displayedTextLocator).getText();
+//        });
+        return ElementInteractions.displayedTextOf(displayedTextLocator);
     }
 
     public void selectFromList(By listLocator, String textToSelect) {
@@ -251,7 +251,7 @@ public class Bot {
 
         driver = new ChromeDriver(options);
         wait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(5))
+                .withTimeout(Duration.ofSeconds(10))
                 .pollingEvery(Duration.ofMillis(300))
                 .ignoring(NoSuchElementException.class)
                 .ignoring(ElementNotInteractableException.class);
