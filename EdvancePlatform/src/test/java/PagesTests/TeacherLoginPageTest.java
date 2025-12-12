@@ -1,6 +1,6 @@
 package PagesTests;
 
-import Pages.TeacherDashBoardPage;
+
 import Pages.TeacherLoginPage;
 import Utilities.ConfigReader;
 import org.testng.Assert;
@@ -20,8 +20,8 @@ public class TeacherLoginPageTest extends BaseTest {
     @Test
     public void successfullLoginTestTeacher1() {
         loginPage.navigateToLoginPage();
-        loginPage.enterEmail("ahmed.mohamed@teacher.com");
-        loginPage.enterPassword("password123");
+        loginPage.enterEmail(ConfigReader.getProperty("teacher.properties","teacher1Email"));
+        loginPage.enterPassword(ConfigReader.getProperty("teacher.properties","teacher.validPassword"));
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher 1 could not login successfully!");
     }
