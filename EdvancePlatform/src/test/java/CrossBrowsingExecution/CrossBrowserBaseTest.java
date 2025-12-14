@@ -10,9 +10,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+//This abstract class is used to be extended from the test class
 public abstract class CrossBrowserBaseTest {
     protected WebDriver driver;
 
+    //This method is used to start before each test method
     @Parameters("browser")
     @BeforeMethod
     public void setup(@Optional("chrome") String browser) {
@@ -33,13 +35,18 @@ public abstract class CrossBrowserBaseTest {
         else {
             throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
+
+        //Invoke this method here in case any test class override it with different implementation
         overrideSetupMethodWhenNeeded();
     }
 
+    //This method is used to be overridden in each test class that need to add
+    // extra setup before test method
     protected void overrideSetupMethodWhenNeeded() {
 
     }
 
+    //This method is used to start after each test method
     @AfterMethod
     public void tearDown() {
         driver.quit();

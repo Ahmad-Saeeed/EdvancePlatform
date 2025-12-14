@@ -10,17 +10,20 @@ import java.net.URL;
 
 public class APITest {
 
+    //API link
     String apiDocumentation = "https://documenter.getpostman.com/view/37731054/2sB3dLVCTz";
+
+    //Courses link from API
     String coursesAPI = "https://isitmondaytoday2.com/api/courses";
 
 
+    //This test method is used to retrieve response from API then print some data to console
     @Test
     public void coursesAPI() {
 
         Response response = get(apiDocumentation);
-
-//        Response response = RestAssured.get(apiDocumentation);
-//        Response response = RestAssured.get(coursesAPI);
+//      Response response = RestAssured.get(apiDocumentation);
+//      Response response = RestAssured.get(coursesAPI);
 
         System.out.println("Status Code: " + response.getStatusCode());
         //System.out.println("Response: " + response.asString());
@@ -33,9 +36,9 @@ public class APITest {
         Assert.assertEquals(statusCode,200);
     }
 
+    //Same as the first method but with another way
     @Test
     public void coursesAPI2(){
         given().get(apiDocumentation).then().statusCode(200);
-
     }
 }
