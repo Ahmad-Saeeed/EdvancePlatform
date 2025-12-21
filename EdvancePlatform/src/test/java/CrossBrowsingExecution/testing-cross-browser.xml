@@ -1,7 +1,12 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="ParallelSuite" parallel="tests" thread-count="2">
 
-    <!--    Parallel Execution for UniversityStudentProfileTest from both Chrome and Edge-->
+<!--    This file work as a test suite to run all the tests from all the defined test classes in it-->
+<!--    and make cross browsing according to the name of the browser passed as a parameter on it.-->
+<!--    This file runs by right click on it and choose play-->
+
+
+    <!--    Cross browsing Execution for UniversityStudentProfileTest from both Chrome and Edge-->
     <test name="UniversityStudentProfileTestChrome">
         <parameter name="browser" value="chrome"/>
         <classes>
@@ -16,74 +21,74 @@
     </test>
 
 
-<!--    &lt;!&ndash;    Parallel Execution for StudentLoginPage from both Chrome and Edge&ndash;&gt;-->
-<!--    <test name="StudentLoginPageChrome">-->
-<!--        <parameter name="browser" value="chrome"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.StudentLoginPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
-<!--    <test name="StudentLoginPageEdge">-->
-<!--        <parameter name="browser" value="edge"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.StudentLoginPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <!--    Cross browsing Execution for StudentLoginPage from both Chrome and Edge-->
+    <test name="StudentLoginPageChrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="PagesTests.StudentLoginPageTest"/>
+        </classes>
+    </test>
+    <test name="StudentLoginPageEdge">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="PagesTests.StudentLoginPageTest"/>
+        </classes>
+    </test>
 
-<!--    &lt;!&ndash;    Parallel Execution for StudentSignUpPage from both Chrome and Edge&ndash;&gt;-->
-<!--    <test name="StudentSignUpPageChrome">-->
-<!--        <parameter name="browser" value="chrome"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.StudentSignUpPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
-<!--    <test name="StudentSignUpPageEdge">-->
-<!--        <parameter name="browser" value="edge"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.StudentSignUpPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <!--    Cross browsing Execution for StudentSignUpPage from both Chrome and Edge-->
+    <test name="StudentSignUpPageChrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="PagesTests.StudentSignUpPageTest"/>
+        </classes>
+    </test>
+    <test name="StudentSignUpPageEdge">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="PagesTests.StudentSignUpPageTest"/>
+        </classes>
+    </test>
 
-<!--    &lt;!&ndash;    Parallel Execution for TeacherDashBoardPage from both Chrome and Edge&ndash;&gt;-->
-<!--    <test name="TeacherDashBoardPageChrome">-->
-<!--        <parameter name="browser" value="chrome"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.TeacherDashBoardPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
-<!--    <test name="TeacherDashBoardPageEdge">-->
-<!--        <parameter name="browser" value="edge"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.TeacherDashBoardPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <!--    Cross browsing Execution for TeacherDashBoardPage from both Chrome and Edge-->
+    <test name="TeacherDashBoardPageChrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="PagesTests.TeacherDashBoardPageTest"/>
+        </classes>
+    </test>
+    <test name="TeacherDashBoardPageEdge">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="PagesTests.TeacherDashBoardPageTest"/>
+        </classes>
+    </test>
 
-<!--    &lt;!&ndash;    Parallel Execution for TeacherLoginPage from both Chrome and Edge&ndash;&gt;-->
-<!--    <test name="TeacherLoginPageChrome">-->
-<!--        <parameter name="browser" value="chrome"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.TeacherLoginPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
-<!--    <test name="TeacherLoginPageEdge">-->
-<!--        <parameter name="browser" value="edge"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.TeacherLoginPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <!--    Cross browsing Execution for TeacherLoginPage from both Chrome and Edge-->
+    <test name="TeacherLoginPageChrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="PagesTests.TeacherLoginPageTest"/>
+        </classes>
+    </test>
+    <test name="TeacherLoginPageEdge">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="PagesTests.TeacherLoginPageTest"/>
+        </classes>
+    </test>
 
-<!--    &lt;!&ndash;    Parallel Execution for TeacherSignUpPage from both Chrome and Edge&ndash;&gt;-->
-<!--    <test name="TeacherSignUpPageChrome">-->
-<!--        <parameter name="browser" value="chrome"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.TeacherSignUpPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
-<!--    <test name="TeacherSignUpPageEdge">-->
-<!--        <parameter name="browser" value="edge"/>-->
-<!--        <classes>-->
-<!--            <class name="PagesTests.TeacherSignUpPageTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <!--    Cross browsing Execution for TeacherSignUpPage from both Chrome and Edge-->
+    <test name="TeacherSignUpPageChrome">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="PagesTests.TeacherSignUpPageTest"/>
+        </classes>
+    </test>
+    <test name="TeacherSignUpPageEdge">
+        <parameter name="browser" value="edge"/>
+        <classes>
+            <class name="PagesTests.TeacherSignUpPageTest"/>
+        </classes>
+    </test>
 
 </suite>

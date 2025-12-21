@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
     public class ExcelUtilsData {
-
+    //this method reads data from Excel workbook and define specific sheet on it
         public static Object[][] getTestData(String filePath, String sheetName) {
 
             Object[][] data = null;
@@ -48,6 +48,7 @@ import java.io.IOException;
             return data;
         }
 
+        //This method ensures that the retrieved data from the Excel sheet returned as String
         private static String getCellValueAsString(Cell cell) {
             if (cell == null) { return ""; }
 

@@ -240,7 +240,7 @@ import org.openqa.selenium.support.ui.Wait;
 public class Bot {
     ChromeOptions options;
     public WebDriver driver;
-    Wait<WebDriver> wait;
+    public Wait<WebDriver> wait;
 //bot
     public Bot() {
 
