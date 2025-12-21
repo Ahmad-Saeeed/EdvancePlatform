@@ -19,7 +19,7 @@ public class TeacherLoginPageTest extends BaseTest {
 
     }
 
-
+//using the internal data provider
     @Test(dataProvider = "loginData")
     public void successfullLoginTestTeacher(String email, String password) {
         loginPage.navigateToLoginPage();
@@ -28,7 +28,7 @@ public class TeacherLoginPageTest extends BaseTest {
         loginPage.clickOnLoginButton();
         Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher  could not login successfully!");
     }
-
+//using data provider excell sheet
     @Test(dataProvider = "credentialsData", dataProviderClass = ExcelDataProvider.class)
     public void successfullLoginTestTeacherExcell(String email, String password) {
         loginPage.navigateToLoginPage();
