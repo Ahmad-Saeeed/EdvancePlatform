@@ -1,10 +1,12 @@
 package PagesTests;
 
 
+import ExcelTest.ExcelDataProvider;
 import Pages.TeacherLoginPage;
 import Utilities.ConfigReader;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 
@@ -18,40 +20,22 @@ public class TeacherLoginPageTest extends BaseTest {
     }
 
 
-    @Test
-    public void successfullLoginTestTeacher1() {
+    @Test(dataProvider = "loginData")
+    public void successfullLoginTestTeacher(String email, String password) {
         loginPage.navigateToLoginPage();
-        loginPage.enterEmail(ConfigReader.getProperty("teacher.properties","teacher1Email"));
-        loginPage.enterPassword(ConfigReader.getProperty("teacher.properties","teacher.validPassword"));
+        loginPage.enterEmail(email);
+        loginPage.enterPassword(password);
         loginPage.clickOnLoginButton();
-        Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher 1 could not login successfully!");
+        Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher  could not login successfully!");
     }
 
-    @Test
-    public void successfullLoginTestTeacher2() {
+    @Test(dataProvider = "credentialsData", dataProviderClass = ExcelDataProvider.class)
+    public void successfullLoginTestTeacherExcell(String email, String password) {
         loginPage.navigateToLoginPage();
-        loginPage.enterEmail(ConfigReader.getProperty("teacher.properties","teacher2Email"));
-        loginPage.enterPassword(ConfigReader.getProperty("teacher.properties","teacher.validPassword"));
+        loginPage.enterEmail(email);
+        loginPage.enterPassword(password);
         loginPage.clickOnLoginButton();
-        Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher 2 could not login successfully!");
-    }
-
-    @Test
-    public void successfullLoginTestTeacher3() {
-        loginPage.navigateToLoginPage();
-        loginPage.enterEmail(ConfigReader.getProperty("teacher.properties","teacher3Email"));
-        loginPage.enterPassword(ConfigReader.getProperty("teacher.properties","teacher.validPassword"));
-        loginPage.clickOnLoginButton();
-        Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher 3 could not login successfully!");
-    }
-
-    @Test
-    public void successfullLoginTestTeacher4() {
-        loginPage.navigateToLoginPage();
-        loginPage.enterEmail(ConfigReader.getProperty("teacher.properties","teacher4Email"));
-        loginPage.enterPassword(ConfigReader.getProperty("teacher.properties","teacher.validPassword"));
-        loginPage.clickOnLoginButton();
-        Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher 4 could not login successfully!");
+        Assert.assertTrue(loginPage.checkWelcomeMessage(), "Failed: Teacher  could not login successfully!");
     }
 
     @Test
@@ -132,6 +116,17 @@ public class TeacherLoginPageTest extends BaseTest {
         loginPage.navigateToLoginPage();
         loginPage.joinFreeClick();
         Assert.assertTrue(loginPage.checkJoinFreePageLanding(), "Failed: Join Free page did NOT load!");
+    }
+
+    @DataProvider(name = "loginData")
+    public Object[][] loginData()
+    {
+        return new Object[][]{
+                {"ahmed.mohamed@teacher.com","password123"},
+                {"fatma.ali@teacher.com","password123"},
+                {"mahmoud.hassan@teacher.com","password123"},
+                {"karim.youssef@teacher.com","password123"}
+        };
     }
 
 }
